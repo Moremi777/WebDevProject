@@ -34,3 +34,7 @@ class LoginForm(AuthenticationForm):
             if self.user_cache is None:
                 raise forms.ValidationError("Invalid email or password")
         return self.cleaned_data
+
+#for upload file
+class FileUploadForm(forms.Form):
+    file = forms.FileField()

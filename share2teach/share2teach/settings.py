@@ -39,13 +39,13 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'base.apps.BaseConfig',
-<<<<<<< HEAD
-    #For upload files
-    'fileupload',
-=======
+
+    
+   
+
     'faq',
-    'rest_framework',
->>>>>>> fd96fa894f51faa6a89861552f97c3c68ac90a1d
+    
+
 ]
 
 REST_FRAMEWORK = {
@@ -149,7 +149,6 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 #For upload files
-import os
-
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+import os #For upload files
+MEDIA_URL = '/media/' #For upload files
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media') #For upload files

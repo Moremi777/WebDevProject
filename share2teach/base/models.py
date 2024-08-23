@@ -30,3 +30,12 @@ class CustomUser(AbstractUser):
     user_type = models.CharField(max_length=20, choices=USER_TYPES, default=EDUCATOR)
     verification_code = models.CharField(max_length=6, blank=True, null=True)
 
+
+class UploadedFile(models.Model): #for upload files
+    file = models.FileField(upload_to='uploads/')  #for upload files
+    uploaded_at = models.DateTimeField(auto_now_add=True)  #for upload files
+
+    def __str__(self): #for upload files
+        return self.file.name #for upload files
+
+
