@@ -3,18 +3,17 @@ from django.contrib.auth import authenticate, login as auth_login, logout as aut
 from django.conf import settings
 from django.shortcuts import redirect
 from django.views import View
-<<<<<<< HEAD
+ 
 from django.shortcuts import render, get_object_or_404
 from .models import Document, Rating
 from .forms import RatingForm
-=======
-<<<<<<< HEAD
+ 
 #for upload files
 from django.shortcuts import render, redirect
 from .forms import FileUploadForm
 from django.conf import settings
 import os
-=======
+ 
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth import login
 from .forms import RegistrationForm
@@ -29,8 +28,7 @@ from .serializers import UserSerializer
 class UserViewSet(viewsets.ModelViewSet):
     queryset = CustomUser.objects.all()
     serializer_class = UserSerializer
->>>>>>> fd96fa894f51faa6a89861552f97c3c68ac90a1d
->>>>>>> 674381f2ae4964a8657a550b60db154c21e5c446
+ 
 
 def home(request):
     return render(request, 'home.html')
@@ -66,12 +64,12 @@ def register(request):
         print(form)  # Debugging line
     return render(request, 'auth/register.html', {'form': form})
 
-<<<<<<< HEAD
+ 
 def login(request):
     # Your registration logic here
     return render(request, 'login.html')
 
-<<<<<<< HEAD
+ 
 def home_view(request):
     documents = Document.objects.all()
     return render(request, 'home.html', {'documents': documents})
@@ -84,7 +82,7 @@ def document_detail_view(request, document_id):
         rating.document = document
         rating.save()
     return render(request, 'document_detail.html', {'document': document, 'form': form})
-=======
+ 
 #for upload files
 def upload_file(request):
     if request.method == 'POST':
@@ -102,8 +100,7 @@ def upload_file(request):
 
 def success(request):
     return render(request, 'fileupload/success.html')
-=======
-
+ 
 def verify_account(request):
     if request.method == 'POST':
         code = request.POST.get('code')
@@ -116,5 +113,12 @@ def verify_account(request):
             # Handle error (e.g., render with an error message)
             pass
     return render(request, 'auth/verify.html')
->>>>>>> fd96fa894f51faa6a89861552f97c3c68ac90a1d
->>>>>>> 674381f2ae4964a8657a550b60db154c21e5c446
+ 
+def home(request):
+    return render(request, 'home.html')
+
+def search_results(request):
+    query = request.GET.get('q')
+    results = Document.objects.filter(name__icontains=query)  # Replace 'name' with the field you want to search
+    return render(request, 'searchresults.html', {'results': results, 'query': query})
+

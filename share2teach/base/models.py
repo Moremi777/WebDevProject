@@ -30,7 +30,6 @@ class CustomUser(AbstractUser):
     user_type = models.CharField(max_length=20, choices=USER_TYPES, default=EDUCATOR)
     verification_code = models.CharField(max_length=6, blank=True, null=True)
 
-<<<<<<< HEAD
 class subject(models.Model):
     name = models.CharField(max_length=100)
 
@@ -49,5 +48,3 @@ class Rating(models.Model):
     date = models.DateTimeField(auto_now_add=True)
 
 
-=======
->>>>>>> 674381f2ae4964a8657a550b60db154c21e5c446

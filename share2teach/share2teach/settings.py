@@ -39,13 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'base.apps.BaseConfig',
-<<<<<<< HEAD
-    #For upload files
-    'fileupload',
-=======
     'faq',
     'rest_framework',
->>>>>>> fd96fa894f51faa6a89861552f97c3c68ac90a1d
 ]
 
 REST_FRAMEWORK = {
