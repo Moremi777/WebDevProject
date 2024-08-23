@@ -1,10 +1,4 @@
 from django import forms
-<<<<<<< HEAD
-
-#for upload files
-class FileUploadForm(forms.Form):
-    file = forms.FileField()
-=======
 from django.contrib.auth.forms import UserCreationForm
 from .models import CustomUser
 from django.contrib.auth.forms import AuthenticationForm
@@ -40,4 +34,3 @@ class LoginForm(AuthenticationForm):
             if self.user_cache is None:
                 raise forms.ValidationError("Invalid email or password")
         return self.cleaned_data
->>>>>>> fd96fa894f51faa6a89861552f97c3c68ac90a1d
