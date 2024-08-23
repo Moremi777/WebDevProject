@@ -1,37 +1,19 @@
 from django.shortcuts import render, redirect, HttpResponse
-from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
 from django.conf import settings
 from django.shortcuts import redirect
 from django.views import View
- 
 from django.shortcuts import render, get_object_or_404
 from .models import Document, Rating
 from .forms import RatingForm
- 
-#for upload files
-from django.shortcuts import render, redirect
 from .forms import FileUploadForm
-from django.conf import settings
 import os
- 
-from django.shortcuts import render, get_object_or_404, redirect
+from django.http import JsonResponse
 from django.contrib.auth import login
-from .forms import RegistrationForm
-from .models import CustomUser
-from .forms import LoginForm
-from .utils import send_verification_code  
-from rest_framework import viewsets
-from .models import CustomUser
-from .serializers import UserSerializer
 
-# VIEWS START HERE
-class UserViewSet(viewsets.ModelViewSet):
-    queryset = CustomUser.objects.all()
-    serializer_class = UserSerializer
- 
 
 def home(request):
     return render(request, 'home.html')
+
 
 def login(request):
     if request.method == 'POST':
@@ -121,4 +103,3 @@ def search_results(request):
     query = request.GET.get('q')
     results = Document.objects.filter(name__icontains=query)  # Replace 'name' with the field you want to search
     return render(request, 'searchresults.html', {'results': results, 'query': query})
-
