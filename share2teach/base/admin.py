@@ -1,13 +1,8 @@
 from django.contrib import admin
-from rest_framework.permissions import BasePermission
-from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
-from .models import CustomUser
+from .models import Subject
 
-class UserAdmin(BaseUserAdmin):
-    model = CustomUser
-    # Add your custom UserAdmin configuration here
-admin.site.register(CustomUser)
+class SubjectAdmin(admin.ModelAdmin):
+    list_display = ('name',)
+    search_fields = ('name',)
 
-class IsAdmin(BasePermission):
-    def has_permission(self, request, view):
-        return request.user and request.user.user_type == 'admin'
+admin.site.register(Subject, SubjectAdmin)
