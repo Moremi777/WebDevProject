@@ -1,5 +1,15 @@
-<ul>
-    {% for file in files %}
-      <li><a href="{{ file.file.url }}">{{ file.file.name }}</a></li>
-    {% endfor %}
-  </ul>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>File List</title>
+</head>
+<body>
+    <h1>Uploaded Files</h1>
+    <ul>
+        {% for file in files %}
+            <li><a href="{{ file.file.url }}">{{ file.file.name }}</a></li>
+        {% endfor %}
+    </ul>
+    <a href="{% url 'upload_file' %}">Upload another file</a>
+</body>
+</html>

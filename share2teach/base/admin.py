@@ -1,16 +1,15 @@
 from django.contrib import admin
-from .models import Subject
+from .models import Subject, UploadedFile
 
-class SubjectAdmin(admin.ModelAdmin):
-    list_display = ('name',)
-    search_fields = ('name',)
 
-admin.site.register(Subject, SubjectAdmin)
+
+class UploadedFileAdmin(admin.ModelAdmin):
+    list_display = ('file',)
+    search_fields = ('uploaded_at',)
+   
+
+
+admin.site.register(UploadedFile, UploadedFileAdmin)
 #from rest_framework.permissions import BasePermission
-from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
-from .models import CustomUser
 
-class UserAdmin(BaseUserAdmin):
-    model = CustomUser
-    # Add your custom UserAdmin configuration here
-admin.site.register(CustomUser)
+

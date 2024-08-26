@@ -1,0 +1,196 @@
+CREATE TABLE Employee (
+    Emp_Num INT PRIMARY KEY,
+    Emp_LastName VARCHAR(100) NOT NULL,
+    Emp_Email VARCHAR(100) NOT NULL,
+    Emp_Contacts VARCHAR(15),
+    Emp_Type VARCHAR(50) NOT NULL  -- 'Cashier' or 'DeliveryPerson'
+);
+
+--------------------------------------------------------------------------------
+
+INSERT INTO Employee (Emp_Num, Emp_LastName, Emp_Email, Emp_Contacts, Emp_Type) VALUES
+(1, 'Lerato', 'Lerato@gamil.com', '1234567890', 'Cashier'),
+(2, 'Palesa', 'Palesa@gamil.com', '0987654321', 'Cashier'),
+(3, 'Thabo', 'Tman@gamil.com', '1234509876', 'Cashier'),
+(4, 'Lou', 'lousassole@gamil.com', '9876543210', 'Cashier'),
+(5, 'Karabo', 'Karabo@gamil.com', '5432109876', 'Cashier'),
+(6, 'Kruger', 'Kruger@gamil.com', '6789054321', 'Cashier'),
+(7, 'Niand', 'Niand@gamil.com', '6789012345', 'Cashier'),
+(8, 'Mohau', 'Mohau@gamil.com', '1234987654', 'Cashier'),
+(9, 'Mapaseka', 'Mapaseka@gamil.com', '0987632109', 'Cashier'),
+(10, 'Charmaine', 'Charmaine@gamil.com', '3210987654', 'Cashier'),
+(11, 'Tumi', 'Tumi@gamil.com', '6543210987', 'Cashier'),
+(12, 'Phuti', 'Sp@gamil.com', '8765432109', 'Cashier'),
+(13, 'John', 'John@yahoo.com', '7654321098', 'DeliveryPerson'),
+(14, 'Kopano', 'wilson@yahoo.com', '9876501234', 'DeliveryPerson'),
+(15, 'Olebogeng', 'Ole@yahoo.com', '1234765098', 'DeliveryPerson'),
+(16, 'Thomas', 'thomas@yahoo.com', '6789543210', 'DeliveryPerson'),
+(17, 'Taylor', 'taylor@yahoo.com', '1234098765', 'DeliveryPerson'),
+(18, 'Bonolo', 'BB@yahoo.com', '5432167890', 'DeliveryPerson'),
+(19, 'Tintswalo', 'Tintswalo@yahoo.com', '1234987650', 'DeliveryPerson'),
+(20, 'Martin', 'martin@yahoo.com', '9876543212', 'DeliveryPerson');
+
+--------------------------------------------------------------------------------------------
+
+CREATE TABLE Cashier (
+    Emp_Num INT PRIMARY KEY,
+    Shift_Hours VARCHAR(50),
+    Service_Rating DECIMAL(3, 2),
+    FOREIGN KEY (Emp_Num) REFERENCES Employee(Emp_Num)
+);
+
+--------------------------------------------------------------------------------------------
+
+INSERT INTO Cashier (Emp_Num, Shift_Hours, Service_Rating) VALUES
+(1, '09:00-17:00', 4.5),
+(2, '10:00-18:00', 4.7),
+(3, '11:00-19:00', 4.3),
+(4, '12:00-20:00', 4.6),
+(5, '09:00-17:00', 4.8),
+(6, '10:00-18:00', 4.2),
+(7, '11:00-19:00', 4.4),
+(8, '12:00-20:00', 4.5),
+(9, '09:00-17:00', 4.7),
+(10, '10:00-18:00', 4.3),
+(11, '11:00-19:00', 4.6),
+(12, '12:00-20:00', 4.4);
+
+-----------------------------------------------------------------------------------------------
+
+
+CREATE TABLE Delivery_Person (
+    Emp_Num INT PRIMARY KEY,
+    Orders_Delivered INT,
+    AverageDeliveryTime DECIMAL(5, 2),
+    FOREIGN KEY (Emp_Num) REFERENCES Employee(Emp_Num)
+);
+
+----------------------------------------------------------------------------------------------
+
+INSERT INTO Delivery_Person (Emp_Num, Orders_Delivered, AverageDeliveryTime) VALUES
+(13, 150, 30.5),
+(14, 200, 25.3),
+(15, 180, 28.4),
+(16, 170, 32.1),
+(17, 210, 26.2),
+(18, 160, 29.7),
+(19, 190, 31.5),
+(20, 220, 24.9);
+
+---------------------------------------------------------------------------------------------
+note* CHECK constraint ensures that the Order_Type column in the Order table can only contain the values 'Online' or 'Instore'.
+CREATE TABLE "Order" (
+    Order_Num INT PRIMARY KEY,
+    Order_Type VARCHAR(10) CHECK (Order_Type IN ('Online', 'Instore')),
+    Purchase_Time DATETIME NOT NULL,
+    Payment_Method VARCHAR(50) NOT NULL,
+    Order_Status VARCHAR(50) NOT NULL,
+    Order_Notes TEXT,
+    Emp_Num INT,
+    Customer_Num INT,
+    FOREIGN KEY (Emp_Num) REFERENCES Employee(Emp_Num)
+);
+--------------------------------------------------------------------------------------------
+
+INSERT INTO "Order" (Order_Num, Order_Type, Purchase_Time, Payment_Method, Order_Status, Order_Notes, Emp_Num, Customer_Num) VALUES
+(1001, 'Instore', '2023-05-14 10:00:00', 'Credit Card', 'Completed', 'no cheese', 1, NULL),
+(1002, 'Instore', '2023-05-14 11:00:00', 'Cash', 'Completed', 'no ice', 2, NULL),
+(1003, 'Online', '2023-05-14 12:00:00', 'Cash', 'Completed', 'extra sauce', NULL, 501),
+(1004, 'Online', '2023-05-14 13:00:00', 'Credit Card', 'Pending', 'extra ketchup', NULL, 502),
+(1005, 'Instore', '2023-05-14 14:00:00', 'Debit Card', 'Completed', 'No tissues', 3, NULL),
+(1006, 'Instore', '2023-05-14 15:00:00', 'Cash', 'Completed', 'more tissues', 4, NULL),
+(1007, 'Online', '2023-05-14 16:00:00', 'Credit Card', 'Completed', 'Well packed', NULL, 503),
+(1008, 'Online', '2023-05-14 17:00:00', 'Debit Card', 'Cancelled', 'extra bag', NULL, 504),
+(1009, 'Instore', '2023-05-14 18:00:00', 'Credit Card', 'Completed', 'no sauce', 5, NULL),
+(1010, 'Instore', '2023-05-14 19:00:00', 'Cash', 'Completed', 'no spices', 6, NULL),
+(1011, 'Online', '2023-05-14 20:00:00', 'Cash', 'Completed', 'ketchup on the side', NULL, 505),
+(1012, 'Online', '2023-05-14 21:00:00', 'Credit Card', 'Pending', 'no ice', NULL, 506);
+
+------------------------------------------------------------------------------------------------------------------------
+
+CREATE TABLE Delivery_Detail (
+    Delivery_Num INT PRIMARY KEY,
+    Delivery_Status VARCHAR(50) NOT NULL,
+    Emp_Num INT,
+    Customer_Num INT,
+    FOREIGN KEY (Emp_Num) REFERENCES Employee(Emp_Num),
+    FOREIGN KEY (Customer_Num) REFERENCES Customer(Customer_Num)
+);
+--------------------------------------------------------------------------------------------------------------------
+
+
+INSERT INTO Delivery_Detail (Delivery_Num, Delivery_Status, Emp_Num, Customer_Num) VALUES
+(1001, 'Delivered', 13, 501),
+(1002, 'Pending', 14, 502),
+(1003, 'Delivered', 15, 503),
+(1004, 'Pending', 16, 504),
+(1005, 'Delivered', 17, 505),
+(1006, 'Pending', 18, 506);
+----------------------------------------------------------------------------------------------------------------------
+
+CREATE TABLE Online_Customer (
+    Customer_Num INT PRIMARY KEY,
+    Customer_Name VARCHAR(100) NOT NULL,
+    Customer_Email VARCHAR(100) NOT NULL,
+    Customer_Contacts VARCHAR(15),
+    Street_Name VARCHAR(100) NOT NULL,
+    Street_Number INT NOT NULL,
+    Suburb_Name VARCHAR(100) NOT NULL
+);
+---------------------------------------------------------------------------------------------------------------------
+INSERT INTO Online_Customer (Customer_Num, Customer_Name, Customer_Email, Customer_Contacts, Street_Name, Street_Number, Suburb_Name) VALUES
+(501, 'Hari sak', 'Hari@gmail.com', '1234567890', 'Doubles corner St', 123, 'Ikageng'),
+(502, 'Bob Johnson', 'bob@gmail.com', '9876543210', 'Steve Biko', 456, 'Uptown'),
+(503, 'Lerato Williams', 'charlie@gmail.com', '2345678901', 'Molen st', 789, 'Molen'),
+(504, 'David Van Wyk', 'david@gmail.com', '8765432109', 'Oak St', 1011, 'Tuscany'),
+(505, 'Onthatile Sebeko', 'emma@gmail.com', '2109876543', 'Cedar St', 1213, 'Eastside'),
+(506, 'Frank Garcia', 'frank@gmail.com', '5678901234', 'Maple St', 1415, 'Southside');
+-------------------------------------------------------------------------------------------------------------------------
+CREATE TABLE Menu_Item (
+    Menu_Item_Num INT PRIMARY KEY,
+    Item_Name VARCHAR(100),
+    Quantity INT,
+    Category VARCHAR(50),
+    Availability VARCHAR(20),
+    Price DECIMAL(10, 2)
+);
+
+---------------------------------------------------------------------------------------------------------------
+
+INSERT INTO Menu_Item (Menu_Item_Num, Item_Name, Quantity, Category, Availability, Price) VALUES
+(1, 'Chicken Wings', 100, 'Food', 'Available', 45.99),
+(2, 'Spathlo', 80, 'Food', 'Available', 29.99),
+(3, 'Dagwood', 120, 'Food', 'Available', 39.99),
+(4, 'Bunny chow', 90, 'Food', 'Available', 34.99),
+(5, 'Cappy', 60, 'Drinks', 'Available', 11.99),
+(6, 'Coke', 70, 'Drinks', 'Available', 19.99),
+(7, 'Bazooka', 110, 'Food', 'Available', 49.99),
+(8, 'Fanta Orange', 85, 'Drinks', 'Available', 19.99),
+(9, 'Pap and Skop', 95, 'Food', 'Available', 69.99),
+(10, 'Fat Cakes', 50, 'Food', 'Available', 4.99);
+
+---------------------------------------------------------------------------------
+
+CREATE TABLE Order_Item (
+    Order_Num INT,
+    Menu_Item_Num INT,
+    aDate DATE,
+    PRIMARY KEY (Order_Num, Menu_Item_Num),
+    FOREIGN KEY (Order_Num) REFERENCES "Order"(Order_Num),
+    FOREIGN KEY (Menu_Item_Num) REFERENCES Menu_Item(Menu_Item_Num)
+);
+
+----------------------------------------------------------------------------
+
+INSERT INTO Order_Item (Order_Num, Menu_Item_Num, aDate) VALUES
+(1001, 1, '2023-05-14'),
+(1001, 3, '2023-05-14'),
+(1002, 2, '2023-05-14'),
+(1003, 4, '2023-05-15'),
+(1003, 6, '2023-05-15'),
+(1004, 5, '2023-05-16'),
+(1005, 3, '2023-05-17'),
+(1005, 1, '2023-05-17'),
+(1005, 4, '2023-05-17'),
+(1006, 2, '2023-05-18');
+---------------------------------------------------------------------------------

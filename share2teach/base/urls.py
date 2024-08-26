@@ -12,17 +12,12 @@ from . import views
 urlpatterns = [
     path("", views.home, name="home"), 
     #for upload files               
-    path('upload/', views.upload_file, name="upload_file"),#for upload files
-    path('success/', views.success, name='success'),  # for upload files
-    static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) #for upload files
+    path('upload/', views.upload_file, name="upload_file"), #for upload files
+    path('success/', views.success, name='success'), #for upload files
+    path('files/', views.file_list, name='file_list'),  # For listing uploaded files
 ]
 
 
 #for upload files
 if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-    path("register/", views.register, name="register"),
-    path("login/", views.login, name="login"),
-    path("logout/", views.logout, name="logout"),
-    path('search/', views.search_results, name='search_results'),  # Search results URL
-]
+   urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
