@@ -119,12 +119,83 @@ def register(request):
                 educator = Educator.objects.create(user=user, affiliation=affiliation, profile_picture=profile_picture)
                 educator.subjects.set(subjects)
 
+            elif user_type == 'administrator':
+                user.is_administrator = True
+                user.save()
+                administrator = Administrator.objects.create(user=user, profile_picture=profile_picture)
+
     return render(request, 'authentication/register.html')
+
+@auth_user_should_not_access
+def admin_register(request):
+    if request.method == "POST":
+        context = {'has_error': False, 'data': request.POST}
+        email = request.POST.get('email')
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        password2 = request.POST.get('password2')
+        user_type = request.POST.get('user_type')
+        profile_picture = request.POST.get('profile_picture')
+
+        if len(password) < 6:
+            messages.add_message(request, messages.ERROR,
+                                 'Password should be at least 6 characters')
+            context['has_error'] = True
+
+        if password != password2:
+            messages.add_message(request, messages.ERROR,
+                                 'Password mismatch')
+            context['has_error'] = True
+
+        if not validate_email(email):
+            messages.add_message(request, messages.ERROR,
+                                 'Enter a valid email address')
+            context['has_error'] = True
+
+        if not username:
+            messages.add_message(request, messages.ERROR,
+                                 'Username is required')
+            context['has_error'] = True
+
+        if User.objects.filter(username=username).exists():
+            messages.add_message(request, messages.ERROR,
+                                 'Username is taken, choose another one')
+            context['has_error'] = True
+
+            return render(request, 'authentication/admin/admin-register.html', context, status=409)
+
+        if User.objects.filter(email=email).exists():
+            messages.add_message(request, messages.ERROR,
+                                 'Email is taken, choose another one')
+            context['has_error'] = True
+
+            return render(request, 'authentication/admin/admin-register.html', context, status=409)
+
+        if context['has_error']:
+            return render(request, 'authentication/admin/admin-register.html', context)
+
+        user = User.objects.create_user(username=username, email=email)
+        user.set_password(password)
+        user.save()
+
+        if not context['has_error']:
+
+            send_activation_email(user, request)
+
+            messages.add_message(request, messages.SUCCESS,
+                                 'We sent you an email to verify your account')
+            return redirect('admin_login')
+
+            if user_type == 'administrator':
+                user.is_moderator = True
+                user.save()
+                Moderator.objects.create(user=user, profile_picture=profile_picture)
+
+    return render(request, 'authentication/admin/admin-register.html')
 
 
 @auth_user_should_not_access
 def login_user(request):
-
     if request.method == 'POST':
         context = {'data': request.POST}
         username = request.POST.get('username')
@@ -151,6 +222,35 @@ def login_user(request):
 
     return render(request, 'authentication/login.html')
 
+@auth_user_should_not_access
+def admin_login(request):
+
+    if request.method == 'POST':
+        context = {'data': request.POST}
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+
+        user = authenticate(request, username=username, password=password)
+
+        if user and not user.is_email_verified:
+            messages.add_message(request, messages.ERROR,
+                                 'Email is not verified, please check your email inbox')
+            return render(request, 'authentication/admin/admin-login.html', context, status=401)
+
+        if not user:
+            messages.add_message(request, messages.ERROR,
+                                 'Invalid credentials, try again')
+            return render(request, 'authentication/admin/admin-login.html', context, status=401)
+
+        login(request, user)
+
+        messages.add_message(request, messages.SUCCESS,
+                             f'Welcome {user.username}')
+
+        return redirect(reverse('home'))
+
+    return render(request, 'authentication/admin/admin-login.html')
+
 
 def logout_user(request):
 
@@ -160,6 +260,15 @@ def logout_user(request):
                          'Successfully logged out')
 
     return redirect(reverse('login'))
+
+def logout_admin(request):
+
+    logout(request)
+
+    messages.add_message(request, messages.SUCCESS,
+                         'Successfully logged out')
+
+    return redirect(reverse('admin_login'))
 
 
 def activate_user(request, uidb64, token):
@@ -182,15 +291,16 @@ def activate_user(request, uidb64, token):
 
 
 @login_required
-def educator_dashboard(request):
+def dashboard(request):
     if request.user.user_type != 'educator':
         return HttpResponseForbidden("You do not have access to this page.")
     # Educator-specific logic
-    return render(request, 'dashboads/educator_dashboard.html')
+    return render(request, 'dashboards/educator_dashboard.html')
+
 
 @login_required
-def moderator_dashboard(request):
-    if request.user.user_type != 'moderator':
+def administrator_dashboard(request):
+    if request.user.user_type != 'administrator':
         return HttpResponseForbidden("You do not have access to this page.")
     # Moderator-specific logic
-    return render(request, 'dashboads/moderator_dashboard.html')
+    return render(request, 'dashboards/administrator_dashboard.html')

@@ -33,6 +33,7 @@ TESTING = len(sys.argv) > 1 and sys.argv[1] == 'test'
 AUTH_USER_MODEL = "authentication.User"
 
 LOGIN_URL = "/auth/login"
+ADMIN_LOGIN_URL = "/admin/auth/login"
 
 # Application definition
 
@@ -93,8 +94,12 @@ WSGI_APPLICATION = 'share2teach.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'share2teach',
+        'HOST': '127.0.0.1', 
+        'PORT': '3331',
+        'USER': 'Olebogeng',
+        'PASSWORD': '@AnbuBlackOps2024',
     }
 }
 
@@ -138,7 +143,6 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 
 USE_TZ = True
-
 
 EMAIL_FROM_USER = 'thespectrumstore21@gmail.com'
 EMAIL_HOST = 'smtp.gmail.com'

@@ -1,5 +1,6 @@
 {% extends "_partials/base.html" %}  {% load static %}
 
+
 {% block content %}
 
 <div class="ui grid">
@@ -8,12 +9,12 @@
     <div class="ui middle aligned center aligned grid">
       <div class="column mt-5">
         <h2 class="ui teal image header">
-          <div class="content">Login</div>
+          <div class="content">Administrator Login</div>
         </h2>
 
           {% include '_partials/messages.html'%}
 
-        <form class="ui large form" method="post" action={% url 'login' %}>
+        <form class="ui large form" method="post" action={% url 'admin_login' %}>
         {% csrf_token %}
         
           <div class="ui stacked segment">
@@ -34,8 +35,8 @@
 
         </form>
 
-        <div class="ui message">Don't have an account? <a href={% url 'register'  %}>Signup</a></div>
-        <a href={% url 'password_reset'  %}>Forgotten Your Password ?</a>
+        <div class="ui message">Dont have an account? <a href={% url 'admin_register'  %}>Signup</a></div>
+        
       </div>
     </div>
     <div class="four wide column"></div>
