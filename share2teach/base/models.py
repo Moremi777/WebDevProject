@@ -31,3 +31,11 @@ class Message(models.Model):
         return f"Message for report on {self.report.document.title}"
 
 #MOREMI - DOCUMENT REPORTING ENDS HERE
+        return self.name
+
+class Rating(models.Model):
+    document = models.ForeignKey(Document, on_delete=models.CASCADE)
+    rating = models.IntegerField()
+    comment = models.TextField(null=True, blank=True)
+    date = models.DateTimeField(auto_now_add=True)
+
