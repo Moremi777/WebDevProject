@@ -16,6 +16,7 @@ urlpatterns = [
     path("logout/", views.logout, name="logout"),
     path('search/', views.search_results, name='search_results'),  
     path('subjects/<int:subject_id>/', views.subject_documents, name='subject_documents'),
+    
 
 
     #for upload files               
