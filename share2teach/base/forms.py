@@ -1,6 +1,5 @@
 from django import forms
 from .models import Report
-from .models import Subject
 
 class ReportForm(forms.ModelForm):
     submitted_by = forms.CharField(required=False, label='Your name or email (optional)')

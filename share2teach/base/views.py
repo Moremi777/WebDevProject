@@ -4,7 +4,6 @@ from django.shortcuts import redirect
 from django.views import View
 from django.shortcuts import render, get_object_or_404
 from .models import Document, Rating
-from .forms import RatingForm
 from .forms import FileUploadForm
 import os
 from django.http import JsonResponse
