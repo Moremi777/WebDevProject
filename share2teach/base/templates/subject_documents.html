@@ -1,0 +1,12 @@
+<!-- subject_documents.html -->
+<h2>Documents for {{ subject.name }}</h2>
+
+{% if documents %}
+    <ul>
+        {% for document in documents %}
+        <li>{{ document.title }} - <a href="{{ document.file.url }}">Download</a></li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>No documents available for this subject.</p>
+{% endif %}

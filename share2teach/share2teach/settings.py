@@ -53,6 +53,8 @@ INSTALLED_APPS = [
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.BasicAuthentication',
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
 }
@@ -162,7 +164,16 @@ EMAIL_PORT = 587
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 #For upload files
-import os
+import os #For upload files
+MEDIA_URL = '/media/' #For upload files
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media') #For upload files
 
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+# code to connect database to file storage
+AZURE_CONNECTION_STRING = 'DefaultEndpointsProtocol=https;AccountName=anbublackops;AccountKey=ydHHH//XnwTrsi8D89Jhw/V+bp0hsCtPADHGE1PFLeJ+ldRgW9MigDeOsWau3pofxyPfYKwpTskE+AStF/dVaw==;EndpointSuffix=core.windows.net'
+AZURE_SHARE_NAME = 'anbu-fileshare'
+
+ORACLE_HOST = '127.0.0.1'
+ORACLE_PORT = '1521'
+ORACLE_SERVICE_NAME = 'XE'
+ORACLE_USERNAME = 'anbu'
+ORACLE_PASSWORD = 'cmpg'

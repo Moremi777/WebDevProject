@@ -14,3 +14,8 @@ class ReportForm(forms.ModelForm):
             'reason': 'Reason for reporting',
         }
 
+
+#for upload file begin
+class FileUploadForm(forms.Form):
+    file = forms.FileField()
+    #for upload file end

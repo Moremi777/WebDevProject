@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Upload File</title>
 </head>
 <body>
     <h1>Upload File</h1>
@@ -12,5 +12,6 @@
         {{ form.as_p }}
         <button type="submit">Upload</button>
     </form>
+    <a href="{% url 'file_list' %}">View Uploaded Files</a>
 </body>
 </html>
