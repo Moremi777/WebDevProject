@@ -163,3 +163,13 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 import os #For upload files
 MEDIA_URL = '/media/' #For upload files
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media') #For upload files
+
+# code to connect database to file storage
+AZURE_CONNECTION_STRING = 'DefaultEndpointsProtocol=https;AccountName=anbublackops;AccountKey=ydHHH//XnwTrsi8D89Jhw/V+bp0hsCtPADHGE1PFLeJ+ldRgW9MigDeOsWau3pofxyPfYKwpTskE+AStF/dVaw==;EndpointSuffix=core.windows.net'
+AZURE_SHARE_NAME = 'anbu-fileshare'
+
+ORACLE_HOST = '127.0.0.1'
+ORACLE_PORT = '1521'
+ORACLE_SERVICE_NAME = 'XE'
+ORACLE_USERNAME = 'anbu'
+ORACLE_PASSWORD = 'cmpg'
