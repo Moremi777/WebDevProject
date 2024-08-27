@@ -22,7 +22,7 @@ urlpatterns = [
     path('upload/', views.upload_file, name="upload_file"), #for upload files
     path('success/', views.success, name='success'), #for upload files
     path('files/', views.file_list, name='file_list'),  # For listing uploaded files
-
+]
 
 
 #for upload files
