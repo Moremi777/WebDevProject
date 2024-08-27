@@ -64,6 +64,8 @@ def search_results(request):
     results = Document.objects.filter(name__icontains=query)  # Replace 'name' with the field you want to search
     return render(request, 'searchresults.html', {'results': results, 'query': query})
 
+
+
 def subject_documents(request, subject_id):
     subject = get_object_or_404(Subject, id=subject_id)
     documents = Document.objects.filter(subject=subject)
