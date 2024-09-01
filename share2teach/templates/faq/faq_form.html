@@ -1,0 +1,17 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>FAQ Form</title>
+</head>
+<body>
+    <h1>FAQ Form</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Save</button>
+    </form>
+    <a href="{% url 'faq_list' %}">Cancel</a>
+</body>
+</html>

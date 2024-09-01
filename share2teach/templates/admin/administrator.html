@@ -1,0 +1,62 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administrator Dashboard</title>
+</head>
+<body>
+    <header>
+        <h1>Administrator Dashboard</h1>
+        <section>
+            <h2>Welcome, {{ user.username }}!</h2>
+            <p>You are logged in as an administrator.</p>
+        </section>
+        <nav>
+            <ul>
+                <li><a href="{% url 'admin_manage_users' %}">Manage Users</a></li>
+                <li><a href="{% url 'admin_site_settings' %}">Site Settings</a></li>
+                <li><a href="{% url 'logout' %}">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+    <div>
+        <h2>Total Users</h2>
+        <p>{{ total_users }}</p>
+    </div>
+    <div>
+        <h2>User Types</h2>
+        <ul>
+            <li>Admin Users: {{ admin_users }}</li>
+            <li>Educator Users: {{ educator_users }}</li>
+            <li>Moderator Users: {{ moderator_users }}</li>
+        </ul>
+    </div>
+    
+    <!-- Google Analytics Data Section -->
+    <div>
+        <h2>Google Analytics Data</h2>
+        <pre>{{ google_analytics_data }}</pre>  <!-- Display raw data or format as needed -->
+    </div>
+
+    <section>
+        <h3>Dashboard Overview</h3>
+        <div>
+            <h4>Recent Activity</h4>
+            <!-- Add recent activity details or graphs here -->
+        </div>
+
+        <div>
+            <h4>Site Statistics</h4>
+             <a href="https://analytics.google.com/analytics/web/?authuser=0#/p454885155/reports/reportinghub?params=_u..nav%3Dmaui"> View Report </a>
+        </div>
+    </section>
+    
+    <footer>
+        <p>&copy; {{ current_year }} Your Website. All rights reserved.</p>
+    </footer>
+
+
+</body>
+</html>

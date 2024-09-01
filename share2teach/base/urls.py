@@ -5,7 +5,6 @@ from django.conf.urls.static import static
 from django.urls import path, include #for upload file
 from . import views #for upload file
 from django.contrib.auth import views as auth_views
-
 from django.urls import path, include
 from . import views
 from django.contrib.auth import views as auth_views
@@ -18,9 +17,6 @@ router.register(r'users', UserViewSet) path('api/', include(router.urls)),'''
 
 urlpatterns = [
     path("", views.home, name="home"), 
-    path("register/", views.register, name="register"),
-    path("login/", views.login, name="login"),
-    path("logout/", views.logout, name="logout"),
     path('search/', views.search_results, name='search_results'),  
     path('subjects/<int:subject_id>/', views.subject_documents, name='subject_documents'),
 
@@ -28,7 +24,7 @@ urlpatterns = [
     path('upload/', views.upload_file, name="upload_file"), #for upload files
     path('success/', views.success, name='success'), #for upload files
     path('files/', views.file_list, name='file_list'),  # For listing uploaded files
-    
+
     path('report/<int:document_id>/', views.report_document, name='report_document'), # MOREMI FILE REPORTING
     path('admin/messages/', views.view_messages, name='view_messages'), # MOREMI FILE REPORTING MESSAGE
     path('admin/messages/delete/<int:message_id>/', views.delete_message, name='delete_message'), # MOREMI FILE REPORTING MESSAGE

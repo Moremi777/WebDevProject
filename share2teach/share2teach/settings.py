@@ -12,7 +12,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 from pathlib import Path
 import os, sys
-
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -49,6 +49,8 @@ INSTALLED_APPS = [
     'drf_yasg',
     'authentication',
     'rest_framework',
+    'rest_framework.authtoken',
+    'corsheaders',
 ]
 
 REST_FRAMEWORK = {
@@ -68,6 +70,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
 ]
 
 ROOT_URLCONF = 'share2teach.urls'
@@ -89,6 +92,11 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'share2teach.wsgi.application'
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:8000",  # Your frontend domain
+    # Add other domains if needed
+]
 
 
 # Database
@@ -123,6 +131,11 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+# settings.py
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend', 
+]
+
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 
@@ -152,7 +165,7 @@ EMAIL_HOST_USER = EMAIL_FROM_USER
 EMAIL_HOST_PASSWORD = 'jznm vfdj dgtc xbhj'
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
-
+FRONTEND_URL = 'http://127.0.0.1:8000'
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/

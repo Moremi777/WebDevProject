@@ -1,4 +1,6 @@
-{% extends "_partials/base.html" %} {% block content %} {% load static %}
+{% extends "_partials/base.html" %}
+{% block content %}
+{% load static %}
 
 <div class="ui grid">
   <div class="four wide column"></div>
@@ -9,29 +11,36 @@
           <div class="content">Registration</div>
         </h2>
 
-          {% include '_partials/messages.html'%}
+        {% include '_partials/messages.html' %}
 
-
-        <form class="ui large form" method="post" action={% url 'register' %}>
+        <form class="ui large form" id="registerForm">
           {% csrf_token %}
           <div class="ui stacked segment">
             <div class="field">
               <div class="ui left icon input">
                 <i class="user icon"></i>
-                <input type="text" name="username" value="{{data.username}}"  placeholder="Username" />
+                <input
+                  type="text"
+                  id="username"
+                  name="username"
+                  value="{{ data.username }}"
+                  placeholder="Username"
+                  required
+                />
               </div>
             </div>
 
             <div class="field">
               <div class="ui left icon input">
                 <i class="user icon"></i>
-                <input type="text" name="email" value="{{data.email}}" placeholder="E-mail address" />
-              </div>
-            </div>
-            <div class="field">
-              <div class="ui left icon input">
-                <i class="lock icon"></i>
-                <input type="password" name="password" placeholder="Password" />
+                <input
+                  type="text"
+                  id="email"
+                  name="email"
+                  value="{{ data.email }}"
+                  placeholder="E-mail address"
+                  required
+                />
               </div>
             </div>
 
@@ -40,29 +49,88 @@
                 <i class="lock icon"></i>
                 <input
                   type="password"
+                  id="password"
+                  name="password"
+                  placeholder="Password"
+                  required
+                />
+              </div>
+            </div>
+
+            <div class="field">
+              <div class="ui left icon input">
+                <i class="lock icon"></i>
+                <input
+                  type="password"
+                  id="password2"
                   name="password2"
                   placeholder="Repeat Password"
+                  required
                 />
               </div>
             </div>
             <button class="ui fluid large teal submit button">Submit</button>
           </div>
-
         </form>
 
-        <div class="ui message">Have an account? <a href={% url 'login'  %}>Login</a></div>
-    <div class="four wide column"></div>
+        <div class="ui message">
+          Have an account?
+          <a href="{% url 'login' %}">Login</a>
+        </div>
+      </div>
+    </div>
   </div>
+  <div class="four wide column"></div>
 </div>
+
+<script>
+  document.getElementById("registerForm").addEventListener("submit", async function(e) {
+    e.preventDefault();
+    const username = document.getElementById("username").value;
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
+    const password2 = document.getElementById("password2").value;
+
+    if (password !== password2) {
+      alert('Passwords do not match.');
+      return;
+    }
+
+    try {
+      const response = await fetch('http://127.0.0.1:8000/auth/api/register/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': '{{ csrf_token }}',  // Send CSRF token for security
+        },
+        body: JSON.stringify({ username, email, password }),
+      });
+
+      const data = await response.json();
+      if (response.ok) {
+        alert('Registration successful! Please verify your email.');
+        // Redirect or additional actions after successful registration
+        window.location.href = '/';  // Redirect to home or login page
+      } else {
+        alert('Registration failed: ' + (data.error || 'Please try again.'));
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      alert('Something went wrong. Please try again later.');
+    }
+  });
+</script>
+
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-Z85TC6V1XG"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
+  function gtag() {
+    dataLayer.push(arguments);
+  }
   gtag('js', new Date());
 
   gtag('config', 'G-Z85TC6V1XG');
 </script>
-
 
 {% endblock content %}

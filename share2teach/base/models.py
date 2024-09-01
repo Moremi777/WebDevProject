@@ -17,6 +17,19 @@ class Document(models.Model):
     upload_date = models.DateTimeField(auto_now_add=True)'''
     # Other fields
 
+class Subject(models.Model):
+    name = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.name
+
+class Document(models.Model):
+    title = models.CharField(max_length=200)
+    file = models.FileField(upload_to='documents/')
+    subject = models.ForeignKey(Subject, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.title
 
 class Report(models.Model):
     document = models.ForeignKey(Document, on_delete=models.CASCADE)
@@ -64,16 +77,4 @@ class UploadedFile(models.Model):
 
 
 
-class Subject(models.Model):
-    name = models.CharField(max_length=100)
 
-    def __str__(self):
-        return self.name
-
-class Document(models.Model):
-    title = models.CharField(max_length=200)
-    file = models.FileField(upload_to='documents/')
-    subject = models.ForeignKey(Subject, on_delete=models.CASCADE)
-
-    def __str__(self):
-        return self.title

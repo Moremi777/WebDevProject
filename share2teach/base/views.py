@@ -19,11 +19,12 @@ from .forms import ReportForm
 from django.contrib.admin.views.decorators import staff_member_required
 from django.shortcuts import get_object_or_404
 from django.contrib.auth import login
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from rest_framework import generics, permissions
 
 def home(request):
     return render(request, 'home.html')
-
-
 
 def home_view(request):
     documents = Document.objects.all()
@@ -58,10 +59,6 @@ def file_list(request):
     files = UploadedFile.objects.all()
     return render(request, 'fileupload/file_list.html', {'files': files})
 #for upload files end
-
- 
-def home(request):
-    return render(request, 'home.html')
 
 def search_results(request):
     query = request.GET.get('q')

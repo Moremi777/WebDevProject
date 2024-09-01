@@ -29,8 +29,6 @@ urlpatterns = [
     path("", include('base.urls')),
     path("auth/", include('authentication.urls')),
     path('faqs/', include('faq.urls')),
-    path('api/', include('base.urls')),
-    
 ]
 
 handler404 = "helpers.views.handle_not_found"
