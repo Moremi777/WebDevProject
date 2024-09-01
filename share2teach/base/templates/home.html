@@ -1,5 +1,19 @@
 {%  extends "base.html" %}
 {% block title %} Home Page {% endblock %}
 {%  block content %}
-    <p>this is the home page </p>
+    <h1>Share2Teach</h1>
+    <nav>
+        <a href="">Home</a>
+        <a href="http://127.0.0.1:5500/share2teach/base/templates/subjects.html">subjects</a>
+        <a href="">FAQ</a>
+        <a href="#">contributers</a>
+        {% if user.is_authenticated %}
+        <form action="{% url 'logout' %}" method="post">
+            {% csrf_token %}
+            <button type="submit">Logout</button>
+        </form> <!-- MOREMI : LOGOUT FUNCTION -->
+        {% endif %}
+
+    </nav>
+    <h2>Search</h2>
 {% endblock %}

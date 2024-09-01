@@ -1,0 +1,14 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>FAQ Detail</title>
+</head>
+<body>
+    <h1>{{ faq.question }}</h1>
+    <p>{{ faq.answer }}</p>
+    <a href="{% url 'faq_list' %}">Back to FAQ List</a>
+    <a href="{% url 'faq_update' faq.pk %}">Edit FAQ</a>
+</body>
+</html>

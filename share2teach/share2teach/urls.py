@@ -14,19 +14,21 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+
 from django.contrib import admin
 from django.urls import path, include
+from django.urls import path, re_path
 from rest_framework import permissions
 
 from django.urls import path, re_path
+from drf_yasg.views import get_schema_view
+from drf_yasg import openapi
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("", include('base.urls')),
     path("auth/", include('authentication.urls')),
     path('faqs/', include('faq.urls')),
-    path('api/', include('base.urls')),
-    
 ]
 
 handler404 = "helpers.views.handle_not_found"

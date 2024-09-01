@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h2>Unread Messages</h2>
+  {% if messages %}
+    <ul>
+      {% for message in messages %}
+        <li>
+          <p>{{ message.content }}</p>
+          <p><small>{{ message.created_at }}</small></p>
+          <a href="{% url 'delete_message' message.id %}" class="btn btn-danger">Delete</a>
+          <a href="{% url 'mark_message_as_read' message.id %}" class="btn btn-primary">Mark as Read</a>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>No new messages.</p>
+  {% endif %}
+{% endblock %}
