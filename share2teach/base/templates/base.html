@@ -44,7 +44,18 @@
           class="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow">
           <li><a href="{% url 'login' %}">Login</a></li>
           <li><a href="{% url 'register' %}">Signup</a></li>
-          <li><a>About</a></li>
+          {% if user.is_authenticated %}
+          <li><a>Upload</a></li>
+          <li><a href="{% url 'update_profile' %}">Profile</a></li>
+          
+            <!-- Check if the user is a Moderator -->
+            {% if user.user_type == 'moderator' %}
+              <li><a href="">Moderate</a></li>
+            {% elif user.user_type == 'Admin' %}
+              <!-- Optional: Show admin-specific options if needed -->
+              <li><a href="{% url 'admin_dashboard' %}">Admin Dashboard</a></li>
+            {% endif %}
+          {% endif %}
         </ul>
       </div>
       {% if user.is_authenticated %}
@@ -52,7 +63,7 @@
       {% endif %}
     </div>
     <div class="navbar-center">
-      <a class="btn btn-ghost text-xl">SHARE2TEACH</a>
+      <a href="{% url 'home' %}" class="btn btn-ghost text-xl">SHARE2TEACH</a>
     </div>
     <div class="navbar-end">
       <button class="btn btn-ghost btn-circle">

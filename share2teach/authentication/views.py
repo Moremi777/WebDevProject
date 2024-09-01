@@ -27,6 +27,16 @@ from django.views import View
 from .forms import UserEditForm  # Import your form if you have one
 from django.shortcuts import render, get_object_or_404, redirect
 from .utils.analytics import get_google_analytics_data
+from rest_framework.permissions import IsAuthenticated
+from .serializers import UserSerializer
+from .permissions import IsAdminUser
+from django.contrib.auth.decorators import permission_required
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.exceptions import PermissionDenied
+from django.contrib.auth.forms import UserCreationForm
+from .forms import CustomUserCreationForm
+from django.contrib.auth.decorators import user_passes_test
+from .forms import UserUpdateForm
 
 
 class EmailThread(threading.Thread):
@@ -157,6 +167,19 @@ def admin_login_page(request):
     return render(request, 'authentication/admin/admin-login.html')
 
 
+@user_passes_test(lambda u: u.is_superuser)
+def add_user(request):
+    if request.method == 'POST':
+        form = CustomUserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('admin_manage_users')  # Redirect after successful creation
+    else:
+        form = CustomUserCreationForm()
+    
+    return render(request, 'admin/admin_add_user.html', {'form': form})
+
+
 class AdminDashboardView(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         total_users = User.objects.count()
@@ -175,6 +198,21 @@ class AdminDashboardView(LoginRequiredMixin, View):
         }
 
         return render(request, 'admin/administrator.html', context)  # Replace with the correct template path
+
+class DeleteUserView(APIView):
+    permission_classes = [IsAdminUser]
+
+    def delete(self, request, user_id, format=None):
+        user = get_object_or_404(User, id=user_id)
+        user.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+@api_view(['DELETE'])
+@permission_classes([IsAdminUser])
+def delete_user(request, user_id):
+    user = get_object_or_404(User, id=user_id)
+    user.delete()
+    return Response(status=status.HTTP_204_NO_CONTENT)
 
 @login_required
 def manage_users(request):
@@ -216,6 +254,21 @@ def update_site_settings(request):
 def site_settings(request):
     # Add logic to handle site settings if necessary
     return render(request, 'admin/site_settings.html')
+
+@login_required
+def update_profile(request):
+    if request.user.user_type not in ['moderator', 'educator']:
+        raise PermissionDenied
+
+    if request.method == 'POST':
+        form = UserUpdateForm(request.POST, request.FILES, instance=request.user)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)
+            return redirect('profile_update_success')
+    else:
+        form = UserUpdateForm(instance=request.user)
+    return render(request, 'userprofile/update_profile.html', {'form': form})
 
 def logout_view(request):
     logout(request)

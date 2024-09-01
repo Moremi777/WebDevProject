@@ -7,11 +7,46 @@
 </head>
 <body>
     <h1>Edit User: {{ user.username }}</h1>
+
+    <!-- Form for editing user details -->
     <form method="post">
         {% csrf_token %}
         {{ form.as_p }}
         <button type="submit">Save changes</button>
     </form>
+
+    <!-- Back to User Management link -->
     <a href="{% url 'admin_manage_users' %}">Back to User Management</a>
+
+    <!-- JavaScript for handling DELETE request -->
+    <form id="delete-form" method="post" action="{% url 'delete_user' user.id %}" style="margin-top: 20px;">
+        {% csrf_token %}
+        <button type="button" onclick="deleteUser();" style="color: red;">Delete User</button>
+    </form>
+
+    <script>
+        function deleteUser() {
+            if (confirm('Are you sure you want to delete this user?')) {
+                fetch(document.getElementById('delete-form').action, {
+                    method: 'DELETE',
+                    headers: {
+                        'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+                    }
+                })
+                .then(response => {
+                    if (response.ok) {
+                        window.location.href = "{% url 'admin_manage_users' %}";
+                    } else {
+                        return response.json().then(data => {
+                            alert('Failed to delete user: ' + (data.detail || 'Unknown error'));
+                        });
+                    }
+                })
+                .catch(error => {
+                    alert('Failed to delete user: ' + error);
+                });
+            }
+        }
+    </script>
 </body>
 </html>

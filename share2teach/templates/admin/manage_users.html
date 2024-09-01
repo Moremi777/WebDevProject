@@ -1,12 +1,9 @@
-<!-- manage_users.html -->
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Manage Users</title>
-
 </head>
 <body>
     <header>
@@ -14,7 +11,6 @@
         <nav>
             <ul>
                 <li><a href="{% url 'admin_dashboard' %}">Dashboard</a></li>
-                <li><a href="{% url 'admin_manage_users' %}">Manage Users</a></li>
                 <li><a href="{% url 'admin_site_settings' %}">Site Settings</a></li>
                 <li><a href="{% url 'logout' %}">Logout</a></li>
             </ul>
@@ -23,6 +19,8 @@
 
     <main>
         <h2>Registered Users</h2>
+        <a href="{% url 'admin_add_user' %}" class="btn btn-primary">Add New User</a> <!-- Add this line -->
+
         <table>
             <thead>
                 <tr>

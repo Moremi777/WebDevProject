@@ -9,6 +9,8 @@ class User(AbstractUser):
     )
 
     user_type = models.CharField(max_length=20, choices=USER_TYPE_CHOICES, default='educator')
+    subject_major = models.CharField(max_length=100, blank=True, null=True)
+    affiliation = models.CharField(max_length=100, blank=True, null=True)
     is_email_verified = models.BooleanField(default=False)
 
     def __str__(self):

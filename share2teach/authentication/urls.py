@@ -2,6 +2,7 @@ from django.urls import path
 from django.contrib.auth import views as auth_views
 from .views import RegisterAPIView, LoginAPIView, verify_email
 from . import views
+from rest_framework.authtoken.views import obtain_auth_token
 
 
 urlpatterns = [
@@ -20,7 +21,13 @@ urlpatterns = [
     path('admin/dashboard/', views.AdminDashboardView.as_view(), name='admin_dashboard'),
     path('admin/manage-users/', views.manage_users, name='admin_manage_users'),
     path('admin/edit-user/<int:user_id>/', views.edit_user, name='admin_edit_user'),
+    path('user/<int:user_id>/delete/', views.DeleteUserView.as_view(), name='delete_user'),
+    path('user/<int:user_id>/delete/', views.delete_user, name='delete_user'),
     path('admin/site-settings/', views.site_settings, name='admin_site_settings'),
-     path('admin/update-site-settings/', views.update_site_settings, name='update_site_settings'),
+    path('admin/update-site-settings/', views.update_site_settings, name='update_site_settings'),
+    path('user/add/', views.add_user, name='admin_add_user'),
+    path('user/<int:user_id>/edit/', views.edit_user, name='admin_edit_user'),
+    path('user/<int:user_id>/delete/', views.delete_user, name='delete_user'),
+    path('update-profile/', views.update_profile, name='update_profile'),
     path('logout/', views.logout_view, name='logout'),
 ]
