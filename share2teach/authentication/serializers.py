@@ -7,6 +7,11 @@ from django.core.mail import send_mail
 from django.conf import settings
 from django.contrib.auth import authenticate
 
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['id', 'username', 'email']
+
 class RegisterSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
