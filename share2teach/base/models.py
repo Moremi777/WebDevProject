@@ -61,7 +61,7 @@ class Message(models.Model):
 
 #for upload files begin
 class UploadedFile(models.Model):
-    file = models.FileField(upload_to='uploads/')  
+    file = models.CharField(max_length=255)  
     uploaded_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

@@ -45,7 +45,7 @@
           <li><a href="{% url 'login' %}">Login</a></li>
           <li><a href="{% url 'register' %}">Signup</a></li>
           {% if user.is_authenticated %}
-          <li><a>Upload</a></li>
+          <li><a href="{% url 'upload_file' %}">Upload</a></li>
           <li><a href="{% url 'update_profile' %}">Profile</a></li>
           
             <!-- Check if the user is a Moderator -->
