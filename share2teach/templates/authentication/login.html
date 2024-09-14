@@ -1,7 +1,7 @@
-{% extends "_partials/base.html" %}  {% load static %}
+{% extends "_partials/base.html" %}
+{% load static %}
 
 {% block content %}
-
 <div class="ui grid">
   <div class="four wide column"></div>
   <div class="eight wide column">
@@ -11,44 +11,107 @@
           <div class="content">Login</div>
         </h2>
 
-          {% include '_partials/messages.html'%}
+        {% include '_partials/messages.html' %}
 
-        <form class="ui large form" method="post" action={% url 'login' %}>
-        {% csrf_token %}
-        
+        <form class="ui large form" id="loginForm">
+          {% csrf_token %}
+
           <div class="ui stacked segment">
             <div class="field">
               <div class="ui left icon input">
                 <i class="user icon"></i>
-                <input type="text" required name="username" placeholder="Username" value="{{ data.username }}" />
+                <input
+                  type="text"
+                  id="loginEmail"
+                  required
+                  name="username"
+                  placeholder="Username"
+                  value="{{ data.username }}"
+                />
               </div>
             </div>
             <div class="field">
               <div class="ui left icon input">
                 <i class="lock icon"></i>
-                <input type="password" required name="password" placeholder="Password" />
+                <input
+                  type="password"
+                  id="loginPassword"
+                  required
+                  name="password"
+                  placeholder="Password"
+                />
               </div>
             </div>
             <button class="ui fluid large teal submit button">Login</button>
           </div>
-
         </form>
 
-        <div class="ui message">Don't have an account? <a href={% url 'register'  %}>Signup</a></div>
-        <a href={% url 'password_reset'  %}>Forgotten Your Password ?</a>
+        <div class="ui message">
+          Don't have an account?
+          <a href="{% url 'register' %}">Signup</a>
+        </div>
+        <a href="{% url 'password_reset' %}">Forgotten Your Password?</a>
       </div>
     </div>
-    <div class="four wide column"></div>
   </div>
-  <!-- Google tag (gtag.js) -->
+  <div class="four wide column"></div>
+</div>
+
+<script>
+  function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+      const cookies = document.cookie.split(';');
+      for (let i = 0; i < cookies.length; i++) {
+        const cookie = cookies[i].trim();
+        if (cookie.substring(0, name.length + 1) === (name + '=')) {
+          cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+          break;
+        }
+      }
+    }
+    return cookieValue;
+  }
+
+  document.getElementById("loginForm").addEventListener("submit", async function(e) {
+    e.preventDefault();
+    const username = document.querySelector('input[name="username"]').value;
+    const password = document.querySelector('input[name="password"]').value;
+
+    try {
+        const response = await fetch('http://127.0.0.1:8000/auth/api/login/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCookie('csrftoken'),
+            },
+            body: JSON.stringify({ username, password }),
+        });
+
+        const data = await response.json();
+        if (response.ok) {
+            alert('Login successful!');
+            window.location.href = '/';  // Handle successful login (e.g., store token or redirect)
+        } else {
+            alert('Login failed: ' + data.error);
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        alert('Something went wrong. Please try again later.');
+    }
+});
+</script>
+
+
+<!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-Z85TC6V1XG"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
+  function gtag() {
+    dataLayer.push(arguments);
+  }
   gtag('js', new Date());
 
   gtag('config', 'G-Z85TC6V1XG');
 </script>
-
-  {% endblock content %}
-</div>
+{% endblock content %}

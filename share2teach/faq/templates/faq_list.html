@@ -1,17 +1,17 @@
+{%  extends "base.html" %}
+{% block title %} FAQ Page {% endblock %}
+{%  block content %}
 {% load static %}
 
-<!DOCTYPE html>
-<html>
-<head>
-    <title>FAQ List</title>
-</head>
-<body>
     <h1>FAQs</h1>
     <ul>
         {% for faq in faqs %}
             <li><a href="{% url 'faq_detail' faq.pk %}">{{ faq.question }}</a></li>
         {% endfor %}
     </ul>
-    <a href="{% url 'faq_create' %}">Add New FAQ</a>
-</body>
-</html>
+    {% if user.is_authenticated %}
+        {% if user.user_type == 'administrator' %}
+            <a href="{% url 'faq_create' %}">Add New FAQ</a>
+        {% endif %}  
+    {% endif %}
+{% endblock content %}

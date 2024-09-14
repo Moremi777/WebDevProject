@@ -9,6 +9,10 @@
     <h1>{{ faq.question }}</h1>
     <p>{{ faq.answer }}</p>
     <a href="{% url 'faq_list' %}">Back to FAQ List</a>
-    <a href="{% url 'faq_update' faq.pk %}">Edit FAQ</a>
+    {% if user.is_authenticated %}
+        {% if user.user_type == 'administrator' %}
+            <a href="{% url 'faq_update' faq.pk %}">Edit FAQ</a>
+        {% endif %}
+    {% endif %}
 </body>
 </html>
