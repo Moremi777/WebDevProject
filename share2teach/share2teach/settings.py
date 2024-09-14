@@ -132,6 +132,26 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': 'django_debug.log',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['file'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+    },
+}
+
+
 # settings.py
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend', 
@@ -185,6 +205,8 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media') #For upload files
 # code to connect database to file storage
 AZURE_CONNECTION_STRING = 'DefaultEndpointsProtocol=https;AccountName=anbublackops;AccountKey=ydHHH//XnwTrsi8D89Jhw/V+bp0hsCtPADHGE1PFLeJ+ldRgW9MigDeOsWau3pofxyPfYKwpTskE+AStF/dVaw==;EndpointSuffix=core.windows.net'
 AZURE_SHARE_NAME = 'anbu-fileshare'
+
+DEFAULT_FILE_STORAGE = 'base.azure_file_storage.AzureFileStorage'
 
 ORACLE_HOST = '127.0.0.1'
 ORACLE_PORT = '1521'
