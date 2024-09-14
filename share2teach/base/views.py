@@ -22,6 +22,7 @@ from django.contrib.auth import login
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import generics, permissions
+from django.core.files.storage import default_storage
 
 def home(request):
     return render(request, 'home.html')
@@ -41,15 +42,25 @@ def document_detail_view(request, document_id):
  
 
 #for upload files begin
+
 def upload_file(request):
     if request.method == 'POST':
         form = FileUploadForm(request.POST, request.FILES)
         if form.is_valid():
-            uploaded_file = UploadedFile(file=request.FILES['file'])  # Create an instance of the model
+            # Get the uploaded file from the form
+            file = request.FILES['file']
+            
+            # Save the file to Azure File Storage using the custom storage backend
+            filename = default_storage.save(f'uploads/{file.name}', file)
+            
+            # Create an instance of the model and save the file URL to the database
+            uploaded_file = UploadedFile(file=filename)  # Save the path or URL
             uploaded_file.save()  # Save the file instance to the database
+            
             return redirect('success')
     else:
         form = FileUploadForm()
+    
     return render(request, 'fileupload/upload.html', {'form': form})
 
 def success(request):
@@ -114,3 +125,11 @@ def mark_message_as_read(request, message_id):
     message.save()
     messages.success(request, 'Message marked as read.')
     return redirect('view_messages')
+
+
+from prometheus_client import generate_latest, CONTENT_TYPE_LATEST
+from django.http import HttpResponse
+
+def metrics_view(request):
+    metrics_page = generate_latest()
+    return HttpResponse(metrics_page, content_type=CONTENT_TYPE_LATEST)
