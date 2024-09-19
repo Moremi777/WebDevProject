@@ -15,6 +15,10 @@ from rest_framework.routers import DefaultRouter
 router = DefaultRouter()
 router.register(r'users', UserViewSet) path('api/', include(router.urls)),'''
 
+from prometheus_client import make_wsgi_app
+from django.http import HttpResponse
+
+
 urlpatterns = [
     path("", views.home, name="home"), 
     path('search/', views.search_results, name='search_results'),  
@@ -31,6 +35,8 @@ urlpatterns = [
     path('admin/messages/mark-read/<int:message_id>/', views.mark_message_as_read, name='mark_message_as_read'), # MOREMI FILE REPORTING MESSAGE
     path('admin/messages/', views.view_messages, name='view_messages'), # MOREMI FILE REPORTING MESSAGE
     path('admin/messages/delete/<int:message_id>/', views.delete_message, name='delete_message'), # MOREMI FILE REPORTING MESSAGE
+
+    path('metrics/', views.metrics_view),
 
 ]
 

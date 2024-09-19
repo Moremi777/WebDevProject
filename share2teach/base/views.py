@@ -24,6 +24,8 @@ from rest_framework.response import Response
 from rest_framework import generics, permissions
 from django.shortcuts import render, redirect
 from google_auth_oauthlib.flow import InstalledAppFlow
+from django.core.files.storage import default_storage
+
 def home(request):
     return render(request, 'home.html')
 

@@ -63,6 +63,7 @@ from django.db import models
 
 class UploadedFile(models.Model):
     file = models.FileField(upload_to='uploads/')
+    file = models.CharField(max_length=255)  
     uploaded_at = models.DateTimeField(auto_now_add=True)
     uploader = models.CharField(max_length=100)  # You can modify as per your needs
     uploader = models.ForeignKey(User, on_delete=models.CASCADE, default=1)  # Replace 1 with a valid default user ID or any other default value
