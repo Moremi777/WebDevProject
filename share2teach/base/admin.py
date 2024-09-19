@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Subject, UploadedFile
+from .models import UploadedFile
 
 
 class UploadedFileAdmin(admin.ModelAdmin):
