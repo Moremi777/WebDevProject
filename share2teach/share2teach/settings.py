@@ -47,11 +47,11 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'base.apps.BaseConfig',
     'faq',
-    'drf_yasg',
     'authentication',
     'rest_framework',
     'rest_framework.authtoken',
     'corsheaders',
+    'storages',
 ]
 
 REST_FRAMEWORK = {
@@ -104,14 +104,31 @@ CORS_ALLOWED_ORIGINS = [
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
+"""DATABASES = {
+'''DATABASES = {
+    'default': {
+        'ENGINE': 'sql_server.pyodbc',  # Or 'django.db.backends.postgresql', depending on your Azure database type
+        'NAME': 'Share2Teach-db',          # Your Azure database name
+        'USER': 'anbu',               # Your Azure SQL Database username
+        'PASSWORD': 'Black0ps',           # Your Azure SQL Database password
+        'HOST': 'anbu-server.database.windows.net',  # Azure database server URL
+        'PORT': '',                        # Default MySQL port (or another if using a different database)
+        'OPTIONS': {
+            'driver': 'ODBC Driver 18 for SQL Server',}
+    }
+}'''
+
+DATABASES = {
+    'default' :{
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
+}"""
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'share2teach',
-        'HOST': '127.0.0.1', 
-        'PORT': '3331',
-        'USER': 'Olebogeng',
-        'PASSWORD': '@AnbuBlackOps2024',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
 
@@ -207,7 +224,13 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media') #For upload files
 AZURE_CONNECTION_STRING = 'DefaultEndpointsProtocol=https;AccountName=anbublackops;AccountKey=ydHHH//XnwTrsi8D89Jhw/V+bp0hsCtPADHGE1PFLeJ+ldRgW9MigDeOsWau3pofxyPfYKwpTskE+AStF/dVaw==;EndpointSuffix=core.windows.net'
 AZURE_SHARE_NAME = 'anbu-fileshare'
 
-DEFAULT_FILE_STORAGE = 'base.azure_file_storage.AzureFileStorage'
+# Azure Storage settings
+AZURE_ACCOUNT_NAME = 'anbublackops'  # Azure Storage account name
+AZURE_ACCOUNT_KEY = 'ydHHH//XnwTrsi8D89Jhw/V+bp0hsCtPADHGE1PFLeJ+ldRgW9MigDeOsWau3pofxyPfYKwpTskE+AStF/dVaw=='    # Azure Storage account key
+AZURE_CONTAINER = 'uploads'   # Name of the container for file storage
+
+# Configure Django's default file storage to use Azure
+DEFAULT_FILE_STORAGE = 'storages.backends.azure_storage.AzureStorage'
 
 ORACLE_HOST = '127.0.0.1'
 ORACLE_PORT = '1521'

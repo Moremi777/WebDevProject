@@ -1,5 +1,7 @@
 from django.contrib import admin
 from .models import Subject, UploadedFile, Report
+from .models import Subject, UploadedFile,Subjects
+from .models import UploadedFile
 
 
 class UploadedFileAdmin(admin.ModelAdmin):
@@ -25,6 +27,10 @@ admin.site.register(Report, ReportAdmin)
 admin.site.register(UploadedFile, UploadedFileAdmin)
 
 #from rest_framework.permissions import BasePermission
+
+
+
+admin.site.register(Subjects)
 
 
 

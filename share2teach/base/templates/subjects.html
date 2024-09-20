@@ -1,10 +1,22 @@
+<!-- subjects.html -->
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>subjects</title>
+    <title>Subjects</title>
 </head>
 <body>
+    <h1>List of Subjects</h1>
+    <div class="Subject">
+        <!-- Loop through the subjects passed from the view -->
+        {% for subject in subjects %}
+            <div class="category">
+                <!-- Make the subject name clickable and pass the subject id in the URL -->
+                <a href="{% url 'selected_subject' subject.id %}">{{ subject.name }}</a>
+            </div>
+        {% endfor %}
+    </div>
         <h1>Subjects</h1>
         <nav>
             <a href="http://127.0.0.1:5500/share2teach/base/templates/maths.html">Mathematics</a>
