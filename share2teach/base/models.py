@@ -22,6 +22,13 @@ class Subject(models.Model):
 
     def __str__(self):
         return self.name
+    
+class Subjects(models.Model):
+    name = models.CharField(max_length=100)
+    # Other fields here
+
+    def __str__(self):
+        return self.name
 
 class Document(models.Model):
     title = models.CharField(max_length=200)
