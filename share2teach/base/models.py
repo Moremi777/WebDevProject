@@ -66,21 +66,33 @@ class Message(models.Model):
     comment = models.TextField(null=True, blank=True)
     date = models.DateTimeField(auto_now_add=True)'''
 
-#for upload files begin
+from django.db import models
+
 class UploadedFile(models.Model):
-    file = models.FileField(upload_to='uploads/')  
+    file = models.FileField(upload_to='uploads/')
+    file = models.CharField(max_length=255)  
     uploaded_at = models.DateTimeField(auto_now_add=True)
+    uploader = models.CharField(max_length=100)  # You can modify as per your needs
+    uploader = models.ForeignKey(User, on_delete=models.CASCADE, default=1)  # Replace 1 with a valid default user ID or any other default value
+
 
     def __str__(self):
-        return self.file.name
-#for upload files end
+        return f"{self.uploader} - {self.file.name}"
 
-'''class UploadedFile(models.Model): #for upload files
-    file = models.FileField(upload_to='uploads/')  #for upload files
-    uploaded_at = models.DateTimeField(auto_now_add=True)  #for upload files
 
-    def __str__(self): #for upload files
-        return self.file.name #for upload files'''
+ 
+
+
+#the following is userTable that going to be used for testing
+class UsersDemo(models.Model):
+    user_id = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=100)
+    surname = models.CharField(max_length=100)
+    subject = models.CharField(max_length=100)
+
+    def __str__(self):
+        return f"{self.name} {self.surname} - {self.subject}"
+#ends here
 
 
 

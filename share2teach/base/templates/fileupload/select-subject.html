@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Subject Selection</title>
+</head>
+<body>
+    <h1>Select a Subject</h1>
+
+    <form method="POST">
+        {% csrf_token %}
+        <label for="user_id">Enter User ID:</label>
+        {{ form.user_id }}
+
+        <label for="subject">Select Subject:</label>
+        {{ form.subject }}
+
+        <button type="submit">Submit</button>
+    </form>
+
+    {% if form.errors %}
+        <p style="color: red;">{{ form.errors }}</p>
+    {% endif %}
+</body>
+</html>

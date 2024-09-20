@@ -4,7 +4,6 @@ from .views import RegisterAPIView, LoginAPIView, verify_email
 from . import views
 from rest_framework.authtoken.views import obtain_auth_token
 
-
 urlpatterns = [
     path('api/register/', RegisterAPIView.as_view(), name='api_register'),
     path('register/', views.register_view, name='register'),

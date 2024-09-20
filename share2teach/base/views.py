@@ -24,6 +24,12 @@ from rest_framework.response import Response
 from rest_framework import generics, permissions
 #View Subject
 from .models import Subjects
+from .forms import SubjectForm
+from .models import UsersDemo
+
+from django.shortcuts import render, redirect
+from google_auth_oauthlib.flow import InstalledAppFlow
+from django.core.files.storage import default_storage
 
 def home(request):
     return render(request, 'home.html')
@@ -32,27 +38,33 @@ def home_view(request):
     documents = Document.objects.all()
     return render(request, 'home.html', {'documents': documents})
 
-def document_detail_view(request, document_id):
+'''def document_detail_view(request, document_id):
     document = get_object_or_404(Document, id=document_id)
     form = RatingForm(request.POST or None)
     if form.is_valid():
         rating = form.save(commit=False)
         rating.document = document
         rating.save()
-    return render(request, 'document_detail.html', {'document': document, 'form': form})
+    return render(request, 'document_detail.html', {'document': document, 'form': form})'''
  
 
 #for upload files begin
+from django.shortcuts import render, redirect
+from .models import UploadedFile
+from .forms import FileUploadForm
+
 def upload_file(request):
     if request.method == 'POST':
         form = FileUploadForm(request.POST, request.FILES)
         if form.is_valid():
-            uploaded_file = UploadedFile(file=request.FILES['file'])  # Create an instance of the model
-            uploaded_file.save()  # Save the file instance to the database
+            file_instance = form.save(commit=False)
+            file_instance.uploader = request.user.username  # Or any other uploader logic
+            file_instance.save()
             return redirect('success')
     else:
         form = FileUploadForm()
-    return render(request, 'fileupload/upload.html', {'form': form})
+    return render(request, 'upload.html', {'form': form})
+
 
 def success(request):
     return render(request, 'fileupload/success.html')
@@ -188,3 +200,35 @@ def subject_list(request):
     ]
     # Render the 'subjects.html' template and pass the subjects list to it
     return render(request, 'subjects.html', {'subjects': subjects})
+
+
+#the following code works the drop box as well
+def user_subject_view(request):
+    if request.method == "POST":
+        form = SubjectForm(request.POST)
+        if form.is_valid():
+            user_id = form.cleaned_data['user_id']
+            # Call the filter_subjects method to limit the dropdown options
+            form.filter_subjects(user_id)
+    else:
+        form = SubjectForm()
+    
+    return render(request, 'fileupload/select-subject.html', {'form': form})
+
+#the code end here_______________________________________________________________
+
+
+def google_oauth(request):
+    SCOPES = ['https://www.googleapis.com/auth/drive.file']
+    
+    # Initialize the OAuth flow
+    flow = InstalledAppFlow.from_client_secrets_file(
+        'credentials/client_secret.json', SCOPES)
+    
+    # Run the OAuth flow and authenticate the user
+    creds = flow.run_local_server(port=0)
+
+    # Do something with the authenticated user (e.g., upload a file)
+    # You can store the credentials or use them immediately
+
+    return redirect('some-view')  # Redirect to another view after authentication

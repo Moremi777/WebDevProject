@@ -21,14 +21,21 @@ from django.urls import path, re_path
 from rest_framework import permissions
 
 from django.urls import path, re_path
-from drf_yasg.views import get_schema_view
-from drf_yasg import openapi
+
+
+from . import views
+
+
+
+'''from drf_yasg.views import get_schema_view
+from drf_yasg import openapi'''
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("", include('base.urls')),
     path("auth/", include('authentication.urls')),
     path('faqs/', include('faq.urls')),
+    path('oauth/', views.google_oauth, name='google_oauth'),
 ]
 
 handler404 = "helpers.views.handle_not_found"
