@@ -1,13 +1,8 @@
-{% extends 'base.html' %}
+<!-- report_document.html -->
 
-{% block content %}
-  <h2>Report {{ document.title }}</h2>
-  
-  <form method="POST">
+<h1>Report Document: {{ document.title }}</h1>
+<form method="POST">
     {% csrf_token %}
     {{ form.as_p }}
     <button type="submit" class="btn btn-danger">Submit Report</button>
-  </form>
-
-  <a href="{% url 'document_detail' document.id %}">Return to Document</a>
-{% endblock %}
+</form>

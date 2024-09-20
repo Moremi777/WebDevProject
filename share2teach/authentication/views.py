@@ -37,7 +37,9 @@ from django.contrib.auth.forms import UserCreationForm
 from .forms import CustomUserCreationForm
 from django.contrib.auth.decorators import user_passes_test
 from .forms import UserUpdateForm
+from django.contrib.auth import update_session_auth_hash
 
+from base.models import Report 
 
 class EmailThread(threading.Thread):
     def __init__(self, email):
@@ -183,13 +185,14 @@ def add_user(request):
 class AdminDashboardView(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         total_users = User.objects.count()
-
+        reported_documents = Report.objects.all() 
         # Breakdown by user types (assuming you have a UserProfile model with a user_type field)
         admin_users = User.objects.filter(user_type='administrator').count()
         educator_users = User.objects.filter(user_type='educator').count()
         moderator_users = User.objects.filter(user_type='moderator').count()
 
         context = {
+            'reported_documents': reported_documents,
             'total_users': total_users,
             'admin_users': admin_users,
             'educator_users': educator_users,
@@ -265,10 +268,12 @@ def update_profile(request):
         if form.is_valid():
             user = form.save()
             update_session_auth_hash(request, user)
-            return redirect('profile_update_success')
+            return redirect('update_profile')
     else:
         form = UserUpdateForm(instance=request.user)
+
     return render(request, 'userprofile/update_profile.html', {'form': form})
+
 
 def logout_view(request):
     logout(request)

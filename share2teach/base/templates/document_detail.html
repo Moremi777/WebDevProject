@@ -1,0 +1,26 @@
+<h1>{{ document.title }}</h1>
+<p>{{ document.description }}</p>
+
+<!-- Display current average rating -->
+<p>Average Rating: {{ avg_rating }}</p>
+
+<!-- If the user has already rated, show a message -->
+{% if existing_rating %}
+    <p>You have already rated this document with a rating of {{ existing_rating.rating }}.</p>
+{% else %}
+    <!-- Display the form to rate the document -->
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Submit Rating</button>
+    </form>
+{% endif %}
+
+<!-- document_detail.html -->
+
+<h1>{{ document.title }}</h1>
+<p>{{ document.content }}</p>
+
+<!-- Add a Report Button -->
+<a href="{% url 'report_document' document.id %}" class="btn btn-danger">Report</a>
+

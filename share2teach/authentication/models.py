@@ -1,6 +1,12 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 
+class Subject(models.Model):
+    name = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.name
+
 class User(AbstractUser):
     USER_TYPE_CHOICES = (
         ('educator', 'Educator'),
@@ -9,24 +15,18 @@ class User(AbstractUser):
     )
 
     user_type = models.CharField(max_length=20, choices=USER_TYPE_CHOICES, default='educator')
-    subject_major = models.CharField(max_length=100, blank=True, null=True)
+    subject_major = models.ForeignKey(Subject, on_delete=models.SET_NULL, null=True, blank=True)
     affiliation = models.CharField(max_length=100, blank=True, null=True)
     is_email_verified = models.BooleanField(default=False)
 
     def __str__(self):
         return self.email
 
-# Educator Model
-class Subject(models.Model):
-    name = models.CharField(max_length=100)
-
-    def __str__(self):
-        return self.name
 
 class Moderator(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     affiliation = models.CharField(max_length=255, blank=True, null=True)
-    profile_picture = models.ImageField(upload_to='profile_pics/', blank=True, null=True)
+    subjects = models.ManyToManyField(Subject, related_name='moderators')
 
     def __str__(self):
         return self.user.username
@@ -34,7 +34,6 @@ class Moderator(models.Model):
 class Educator(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     affiliation = models.CharField(max_length=255, blank=True, null=True)
-    profile_picture = models.ImageField(upload_to='profile_pics/', blank=True, null=True)
     subjects = models.ManyToManyField(Subject, related_name='educators')
 
     def __str__(self):

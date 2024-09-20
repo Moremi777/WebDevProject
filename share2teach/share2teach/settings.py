@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
+import pyodbc
 import os, sys
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 # Build paths inside the project like this: BASE_DIR / 'subdir'.

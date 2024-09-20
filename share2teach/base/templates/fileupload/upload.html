@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!--<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -14,4 +14,22 @@
     </form>
     <a href="{% url 'file_list' %}">View Uploaded Files</a>
 </body>
-</html>
+</html>-->
+<h1>Upload a New Document</h1>
+
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Upload</button>
+</form>
+
+<h1>Uploaded Documents</h1>
+
+<ul>
+  {% for document in documents %}
+    <li><a href="{% url 'document_detail' document.id %}">{{ document.title }}</a></li>
+  {% endfor %}
+</ul>
+
+<a href="{% url 'upload_document' %}">Upload a New Document</a>
+

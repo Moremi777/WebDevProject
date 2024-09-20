@@ -1,6 +1,6 @@
 from django.contrib import admin
 from .models import User, Educator, Moderator, Subject
-from .forms import AdminUserEditForm
+from .forms import AdminUserEditForm, UserUpdateForm
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.utils.html import format_html
 from django.urls import reverse, path
@@ -9,13 +9,14 @@ from django.shortcuts import get_object_or_404
 from django.http import HttpResponseRedirect
 
 class UserAdmin(BaseUserAdmin):
+    form = UserUpdateForm
     form = AdminUserEditForm  # Use your custom form here
 
     fieldsets = BaseUserAdmin.fieldsets + (
-        (None, {'fields': ('user_type',)}),  # Add the user_type field to the admin form
+        (None, {'fields': ('user_type', 'subject_major', 'affiliation')}),  # Add the user_type field to the admin form
     )
 
-    list_display = ('username', 'email', 'first_name', 'last_name', 'user_type', 'is_staff', 'delete_button')
+    list_display = ('username', 'email', 'first_name', 'last_name', 'user_type', 'subject_major', 'affiliation', 'is_staff', 'delete_button')
     list_filter = ('is_staff', 'is_superuser', 'is_active', 'groups')
     list_per_page = 25
 

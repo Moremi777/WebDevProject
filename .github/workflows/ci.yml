@@ -1,0 +1,37 @@
+name: CI Pipeline
+
+on: 
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+      # Checkout the repository
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      # Set up Docker
+      - name: Set up Docker
+        uses: docker/setup-buildx-action@v1
+
+      # Build Docker image
+      - name: Build Docker image
+        run: docker build -t my_django_app .
+
+      # Run tests inside the Docker container
+      - name: Run tests
+        run: docker run my_django_app python manage.py test
+
+      # (Optional) Push Docker image to DockerHub
+      - name: Login to DockerHub
+        run: echo "${{ secrets.DOCKERHUB_PASSWORD }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
+      
+      - name: Push Docker image
+        run: docker tag my_django_app:latest my_dockerhub_username/my_django_app:latest && docker push my_dockerhub_username/my_django_app:latest

@@ -2,8 +2,8 @@ from django.conf import settings
 
 from django.conf.urls.static import static
 
-from django.urls import path, include #for upload file
-from . import views #for upload file
+from django.urls import path, include 
+from . import views
 from django.contrib.auth import views as auth_views
 from django.urls import path, include
 from . import views
@@ -23,9 +23,13 @@ urlpatterns = [
     path("", views.home, name="home"), 
     path('search/', views.search_results, name='search_results'),  
     path('subjects/<int:subject_id>/', views.subject_documents, name='subject_documents'),
-
-    #for upload files               
-    path('upload/', views.upload_file, name="upload_file"), #for upload files
+    path('upload/', views.upload_document, name='upload_document'),
+    path('documents/', views.document_list, name='document_list'),
+    path('document/<int:document_id>/', views.document_detail, name='document_detail'),
+    path('upload/', views.upload_document, name='upload_document'), 
+    path('document/<int:id>/', views.document_detail, name='document_detail'),
+    path('documents/<int:document_id>/report/', views.report_document, name='report_document'),
+    #for upload files
     path('success/', views.success, name='success'), #for upload files
     path('files/', views.file_list, name='file_list'),  # For listing uploaded files
 

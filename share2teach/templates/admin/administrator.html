@@ -52,6 +52,34 @@
              <a href="https://analytics.google.com/analytics/web/?authuser=0#/p454885155/reports/reportinghub?params=_u..nav%3Dmaui"> View Report </a>
         </div>
     </section>
+
+    <section>
+        <h3>Reported Documents</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Document Title</th>
+                    <th>Reported By</th>
+                    <th>Reason</th>
+                    <th>Date Reported</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for report in reported_documents %}
+                <tr>
+                    <td>{{ report.document.title }}</td>
+                    <td>{{ report.reported_by }}</td>
+                    <td>{{ report.reason }}</td>
+                    <td>{{ report.created_at }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="4">No reports found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </section>
     
     <footer>
         <p>&copy; {{ current_year }} Your Website. All rights reserved.</p>

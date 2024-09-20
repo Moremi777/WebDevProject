@@ -3,9 +3,11 @@
 <head>
     <title>Success</title>
 </head>
+
 <body>
-    <h1>File Uploaded Successfully!</h1>
-    <a href="{% url 'upload_file' %}">Upload another file</a>
-    <a href="{% url 'file_list' %}">View Uploaded Files</a>
+    <h2>Upload Successful</h2>
+<p>Your document has been uploaded successfully!</p>
+<a href="{% url 'document_list' %}">Go to Document List</a>
+
 </body>
 </html>
