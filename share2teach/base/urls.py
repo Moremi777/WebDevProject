@@ -12,10 +12,14 @@ from rest_framework.routers import DefaultRouter
 from .views import user_subject_view #code for user subject
 
 
+from prometheus_client import make_wsgi_app
+from django.http import HttpResponse
+
+
 urlpatterns = [
     path("", views.home, name="home"), 
     path('search/', views.search_results, name='search_results'),  
-    path('subjects/<int:subject_id>/', views.subject_documents, name='subject_documents'),
+    #path('subjects/<int:subject_id>/', views.subject_documents, name='subject_documents'),'''
 
     path('select-subject/', user_subject_view, name='select_subject'),
 
@@ -24,12 +28,14 @@ urlpatterns = [
     path('success/', views.success, name='success'), #for upload files
     path('files/', views.file_list, name='file_list'),  # For listing uploaded files
 
-    path('report/<int:document_id>/', views.report_document, name='report_document'), # MOREMI FILE REPORTING
+    #path('report/<int:document_id>/', views.report_document, name='report_document'), # MOREMI FILE REPORTING
     path('admin/messages/', views.view_messages, name='view_messages'), # MOREMI FILE REPORTING MESSAGE
     path('admin/messages/delete/<int:message_id>/', views.delete_message, name='delete_message'), # MOREMI FILE REPORTING MESSAGE
     path('admin/messages/mark-read/<int:message_id>/', views.mark_message_as_read, name='mark_message_as_read'), # MOREMI FILE REPORTING MESSAGE
     path('admin/messages/', views.view_messages, name='view_messages'), # MOREMI FILE REPORTING MESSAGE
     path('admin/messages/delete/<int:message_id>/', views.delete_message, name='delete_message'), # MOREMI FILE REPORTING MESSAGE
+
+    path('metrics/', views.metrics_view),
 
 ]
 

@@ -1,6 +1,7 @@
 from django import forms
 from .models import Report
 from .models import UsersDemo
+from .models import UploadedFile
 
 class ReportForm(forms.ModelForm):
     submitted_by = forms.CharField(required=False, label='Your name or email (optional)')

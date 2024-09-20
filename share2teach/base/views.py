@@ -25,6 +25,9 @@ from rest_framework import generics, permissions
 from .forms import SubjectForm
 from .models import UsersDemo
 
+from django.shortcuts import render, redirect
+from google_auth_oauthlib.flow import InstalledAppFlow
+from django.core.files.storage import default_storage
 
 def home(request):
     return render(request, 'home.html')
@@ -33,27 +36,33 @@ def home_view(request):
     documents = Document.objects.all()
     return render(request, 'home.html', {'documents': documents})
 
-def document_detail_view(request, document_id):
+'''def document_detail_view(request, document_id):
     document = get_object_or_404(Document, id=document_id)
     form = RatingForm(request.POST or None)
     if form.is_valid():
         rating = form.save(commit=False)
         rating.document = document
         rating.save()
-    return render(request, 'document_detail.html', {'document': document, 'form': form})
+    return render(request, 'document_detail.html', {'document': document, 'form': form})'''
  
 
 #for upload files begin
+from django.shortcuts import render, redirect
+from .models import UploadedFile
+from .forms import FileUploadForm
+
 def upload_file(request):
     if request.method == 'POST':
         form = FileUploadForm(request.POST, request.FILES)
         if form.is_valid():
-            uploaded_file = UploadedFile(file=request.FILES['file'])  # Create an instance of the model
-            uploaded_file.save()  # Save the file instance to the database
+            file_instance = form.save(commit=False)
+            file_instance.uploader = request.user.username  # Or any other uploader logic
+            file_instance.save()
             return redirect('success')
     else:
         form = FileUploadForm()
-    return render(request, 'fileupload/upload.html', {'form': form})
+    return render(request, 'upload.html', {'form': form})
+
 
 def success(request):
     return render(request, 'fileupload/success.html')
@@ -69,7 +78,7 @@ def search_results(request):
     return render(request, 'searchresults.html', {'results': results, 'query': query})
 
 
-def subject_documents(request, subject_id):
+'''def subject_documents(request, subject_id):
     subject = get_object_or_404(Subject, id=subject_id)
     documents = Document.objects.filter(subject=subject)
     return render(request, 'subject_documents.html', {'subject': subject, 'documents': documents})
@@ -95,7 +104,7 @@ def report_document(request, document_id):
     else:
         form = ReportForm()
 
-    return render(request, 'report_document.html', {'form': form, 'document': document})
+    return render(request, 'report_document.html', {'form': form, 'document': document})'''
 
 
 @staff_member_required
@@ -136,3 +145,17 @@ def user_subject_view(request):
 #the code end here_______________________________________________________________
 
 
+def google_oauth(request):
+    SCOPES = ['https://www.googleapis.com/auth/drive.file']
+    
+    # Initialize the OAuth flow
+    flow = InstalledAppFlow.from_client_secrets_file(
+        'credentials/client_secret.json', SCOPES)
+    
+    # Run the OAuth flow and authenticate the user
+    creds = flow.run_local_server(port=0)
+
+    # Do something with the authenticated user (e.g., upload a file)
+    # You can store the credentials or use them immediately
+
+    return redirect('some-view')  # Redirect to another view after authentication
