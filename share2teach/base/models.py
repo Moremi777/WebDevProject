@@ -76,5 +76,17 @@ class UploadedFile(models.Model):
         return self.file.name #for upload files'''
 
 
+#the following is userTable that going to be used for testing
+class UsersDemo(models.Model):
+    user_id = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=100)
+    surname = models.CharField(max_length=100)
+    subject = models.CharField(max_length=100)
+
+    def __str__(self):
+        return f"{self.name} {self.surname} - {self.subject}"
+#ends here
+
+
 
 

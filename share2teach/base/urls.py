@@ -9,16 +9,15 @@ from django.urls import path, include
 from . import views
 from django.contrib.auth import views as auth_views
 from rest_framework.routers import DefaultRouter
+from .views import user_subject_view #code for user subject
 
-'''from .views import UserViewSet
-
-router = DefaultRouter()
-router.register(r'users', UserViewSet) path('api/', include(router.urls)),'''
 
 urlpatterns = [
     path("", views.home, name="home"), 
     path('search/', views.search_results, name='search_results'),  
     path('subjects/<int:subject_id>/', views.subject_documents, name='subject_documents'),
+
+    path('select-subject/', user_subject_view, name='select_subject'),
 
     #for upload files               
     path('upload/', views.upload_file, name="upload_file"), #for upload files
@@ -38,3 +37,5 @@ urlpatterns = [
 #for upload files
 if settings.DEBUG:
    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+

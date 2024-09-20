@@ -103,7 +103,7 @@ CORS_ALLOWED_ORIGINS = [
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
-DATABASES = {
+'''DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'share2teach',
@@ -111,6 +111,13 @@ DATABASES = {
         'PORT': '3331',
         'USER': 'Olebogeng',
         'PASSWORD': '@AnbuBlackOps2024',
+    }
+}'''
+
+DATABASES = {
+    'default' :{
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
 

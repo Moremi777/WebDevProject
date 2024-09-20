@@ -22,6 +22,9 @@ from django.contrib.auth import login
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import generics, permissions
+from .forms import SubjectForm
+from .models import UsersDemo
+
 
 def home(request):
     return render(request, 'home.html')
@@ -114,3 +117,22 @@ def mark_message_as_read(request, message_id):
     message.save()
     messages.success(request, 'Message marked as read.')
     return redirect('view_messages')
+
+
+
+#the following code works the drop box as well
+def user_subject_view(request):
+    if request.method == "POST":
+        form = SubjectForm(request.POST)
+        if form.is_valid():
+            user_id = form.cleaned_data['user_id']
+            # Call the filter_subjects method to limit the dropdown options
+            form.filter_subjects(user_id)
+    else:
+        form = SubjectForm()
+    
+    return render(request, 'fileupload/select-subject.html', {'form': form})
+
+#the code end here_______________________________________________________________
+
+
