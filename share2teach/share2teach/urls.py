@@ -20,10 +20,6 @@ from django.urls import path, include
 from django.urls import path, re_path
 from rest_framework import permissions
 
-from django.urls import path, re_path
-
-
-from . import views
 
 
 
@@ -35,7 +31,7 @@ urlpatterns = [
     path("", include('base.urls')),
     path("auth/", include('authentication.urls')),
     path('faqs/', include('faq.urls')),
-    path('oauth/', views.google_oauth, name='google_oauth'),
+    
 ]
 
 handler404 = "helpers.views.handle_not_found"

@@ -8,10 +8,10 @@ from django.shortcuts import render, get_object_or_404
 from .forms import FileUploadForm
 #for upload files
 from django.shortcuts import render, redirect #for upload files #for upload files
-from .models import UploadedFile #for upload file
+#from .models import UploadedFile #for upload file
 from django.conf import settings
 import os
-from django.http import JsonResponse
+from django.http import JsonResponse,HttpResponse
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from .models import Document, Report, Message
@@ -30,6 +30,8 @@ from .models import UsersDemo
 from django.shortcuts import render, redirect
 from google_auth_oauthlib.flow import InstalledAppFlow
 from django.core.files.storage import default_storage
+from prometheus_client import generate_latest,CONTENT_TYPE_LATEST
+
 
 def home(request):
     return render(request, 'home.html')
@@ -50,7 +52,7 @@ def home_view(request):
 
 #for upload files begin
 from django.shortcuts import render, redirect
-from .models import UploadedFile
+#from .models import UploadedFile
 from .forms import FileUploadForm
 
 def upload_file(request):
@@ -58,12 +60,11 @@ def upload_file(request):
         form = FileUploadForm(request.POST, request.FILES)
         if form.is_valid():
             file_instance = form.save(commit=False)
-            file_instance.uploader = request.user.username  # Or any other uploader logic
             file_instance.save()
             return redirect('success')
     else:
         form = FileUploadForm()
-    return render(request, 'upload.html', {'form': form})
+    return render(request, 'fileupload/upload.html', {'form': form})
 
 
 def success(request):
@@ -98,6 +99,12 @@ def subjects(request):
 def selected_subject(request, subject_id):
     subject = get_object_or_404(Subjects, id=subject_id)
     return render(request, 'selected_subject.html', {'subject': subject})
+
+#Metric view for user performance
+def metrics_view(request):
+    metrics_page = generate_latest()
+    return HttpResponse(metrics_page, content_type = CONTENT_TYPE_LATEST)
+
     
 
 

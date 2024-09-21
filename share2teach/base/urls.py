@@ -6,12 +6,11 @@ from django.urls import path, include #for upload file
 from . import views #for upload file
 from django.contrib.auth import views as auth_views
 from django.urls import path, include
-from . import views
+
 from django.contrib.auth import views as auth_views
 from rest_framework.routers import DefaultRouter
 from django.shortcuts import render
 from .views import user_subject_view #code for user subject
-
 
 from prometheus_client import make_wsgi_app
 from django.http import HttpResponse
@@ -23,7 +22,7 @@ urlpatterns = [
     #path('subjects/<int:subject_id>/', views.subject_documents, name='subject_documents'),
     path('subjects/',views.subjects, name = 'subjects'),
     path('subjects/<int:subject_id>/', views.selected_subject, name='selected_subject'),
-    
+    path('oauth/', views.google_oauth, name='google_oauth'),
     #path('subjects/<int:subject_id>/', views.subject_documents, name='subject_documents'),'''
 
     path('select-subject/', user_subject_view, name='select_subject'),
