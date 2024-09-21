@@ -10,7 +10,7 @@ class UserUpdateForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(UserUpdateForm, self).__init__(*args, **kwargs)
-        if self.instance.user_type not in ['educator', 'moderator']:
+        if self.instance.user_type not in ['Educator', 'Moderator']:
             self.fields.pop('subject_major', None)
             self.fields.pop('affiliation', None)
 

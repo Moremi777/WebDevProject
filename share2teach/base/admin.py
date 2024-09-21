@@ -1,12 +1,5 @@
 from django.contrib import admin
-from .models import Subject, UploadedFile, Report
-from .models import Subject, UploadedFile,Subjects
-from .models import UploadedFile
-
-
-class UploadedFileAdmin(admin.ModelAdmin):
-    list_display = ('file',)
-    search_fields = ('uploaded_at',)
+from .models import Subject, Report, Document
    
 class ReportAdmin(admin.ModelAdmin):
     list_display = ('document_title', 'document_file', 'reported_by', 'reason', 'created_at')
@@ -24,13 +17,11 @@ class ReportAdmin(admin.ModelAdmin):
 
 admin.site.register(Report, ReportAdmin)
 
-admin.site.register(UploadedFile, UploadedFileAdmin)
 
 #from rest_framework.permissions import BasePermission
 
-
-
-admin.site.register(Subjects)
+admin.site.register(Subject)
+admin.site.register(Document)
 
 
 

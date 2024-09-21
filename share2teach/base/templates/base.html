@@ -23,56 +23,9 @@
 <script src="https://cdn.tailwindcss.com"></script>
 
 <div class="navbar bg-base-100" style="color: white;">
-    <div class="navbar-start">
-      <div class="dropdown">
-        <div tabindex="0" role="button" class="btn btn-ghost btn-circle">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="h-5 w-5"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor">
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M4 6h16M4 12h16M4 18h7" />
-          </svg>
-        </div>
-        <ul
-          tabindex="0"
-          class="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow">
-          {% if user.is_authenticated %}
-          <!-- User is logged in, so you might want to show these links -->
-          <li><a href="{% url 'logout' %}">Logout</a></li>
-          {% else %}
-          <!-- User is not logged in, so show login and signup links -->
-          <li><a href="{% url 'login' %}">Login</a></li>
-          <li><a href="{% url 'register' %}">Signup</a></li>
-          {% endif %}
-          {% if user.is_authenticated %}
-          <li><a href="{% url 'upload_file' %}">Upload</a></li>
-          <li><a href="{% url 'update_profile' %}">Profile</a></li>
-          
-            <!-- Check if the user is a Moderator -->
-            {% if user.user_type == 'moderator' %}
-              <li><a href="">Moderate</a></li>
-            {% elif user.user_type == 'Admin' %}
-              <!-- Optional: Show admin-specific options if needed -->
-              <li><a href="{% url 'admin_dashboard' %}">Admin Dashboard</a></li>
-            {% endif %}
-          {% endif %}
-        </ul>
-      </div>
-      {% if user.is_authenticated %}
-        <h1> Hi, {{ user.username }} </h1>
-      {% endif %}
-    </div>
-    <div class="navbar-center">
-      <a href="{% url 'home' %}" class="btn btn-ghost text-xl">SHARE2TEACH</a>
-    </div>
-    <div class="navbar-end">
-      <button class="btn btn-ghost btn-circle">
+  <div class="navbar-start">
+    <div class="dropdown">
+      <div tabindex="0" role="button" class="btn btn-ghost btn-circle">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           class="h-5 w-5"
@@ -83,28 +36,88 @@
             stroke-linecap="round"
             stroke-linejoin="round"
             stroke-width="2"
-            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            d="M4 6h16M4 12h16M4 18h7" />
         </svg>
-      </button>
-      <button class="btn btn-ghost btn-circle">
-        <div class="indicator">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="h-5 w-5"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor">
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
-          </svg>
-          <span class="badge badge-xs badge-primary indicator-item"></span>
-        </div>
-      </button>
+      </div>
+      <ul
+        tabindex="0"
+        class="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow">
+        {% if user.is_authenticated %}
+        <li><a href="{% url 'logout' %}">Logout</a></li>
+        {% else %}
+        <li><a href="{% url 'login' %}">Login</a></li>
+        <li><a href="{% url 'register' %}">Signup</a></li>
+        {% endif %}
+        {% if user.is_authenticated %}
+        <li><a href="{% url 'upload_file' %}">Upload</a></li>
+        <li><a href="{% url 'update_profile' %}">Profile</a></li>
+
+        {% if user.user_type == 'moderator' %}
+          <li><a href="">Moderate</a></li>
+        {% elif user.user_type == 'Admin' %}
+          <li><a href="{% url 'admin_dashboard' %}">Admin Dashboard</a></li>
+        {% endif %}
+        {% endif %}
+      </ul>
     </div>
+    {% if user.is_authenticated %}
+      <h1> Hi, {{ user.username }} </h1>
+    {% endif %}
   </div>
+  
+  <!-- Flexbox for center content -->
+  <div class="navbar-center flex-1">
+    <a href="{% url 'home' %}" class="btn btn-ghost text-xl">SHARE2TEACH</a>
+  </div>
+
+  <!-- Flexbox for the right content -->
+  <div class="navbar-end flex items-center space-x-4">
+    <!-- Search Form -->
+    <form class="form-inline" method="get" action="">
+      <div class="form-group flex items-center space-x-2">
+        <input type="text" class="input input-bordered" placeholder="Search..." name="q" />
+        <button type="submit" class="btn btn-ghost">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 1114 0 7 7 0 01-14 0z" />
+          </svg>
+        </button>
+      </div>
+    </form>
+
+    <!-- Other right-side buttons -->
+    <button class="btn btn-ghost btn-circle">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="h-5 w-5"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor">
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+      </svg>
+    </button>
+    <button class="btn btn-ghost btn-circle">
+      <div class="indicator">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-5 w-5"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor">
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+        </svg>
+        <span class="badge badge-xs badge-primary indicator-item"></span>
+      </div>
+    </button>
+  </div>
+</div>
 
 <div class="ui container">
     {% block content%}

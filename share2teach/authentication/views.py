@@ -38,6 +38,7 @@ from .forms import CustomUserCreationForm
 from django.contrib.auth.decorators import user_passes_test
 from .forms import UserUpdateForm
 from django.contrib.auth import update_session_auth_hash
+from google.analytics.data import BetaAnalyticsDataClient
 
 from base.models import Report 
 
@@ -186,10 +187,27 @@ class AdminDashboardView(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         total_users = User.objects.count()
         reported_documents = Report.objects.all() 
-        # Breakdown by user types (assuming you have a UserProfile model with a user_type field)
         admin_users = User.objects.filter(user_type='administrator').count()
         educator_users = User.objects.filter(user_type='educator').count()
         moderator_users = User.objects.filter(user_type='moderator').count()
+
+        # Fetching Google Analytics data
+        client = BetaAnalyticsDataClient.from_service_account_file('path/to/your/service-account-file.json')
+
+        request = RunReportRequest(
+            property='properties/YOUR_PROPERTY_ID',
+            dimensions=[{'name': 'date'}],
+            metrics=[{'name': 'activeUsers'}],
+            date_ranges=[{'start_date': '30daysAgo', 'end_date': 'today'}]
+        )
+
+        response = client.run_report(request)
+
+        # Process response into a more usable format
+        google_analytics_data = [
+            {'date': row.dimension_values[0].value, 'active_users': row.metric_values[0].value}
+            for row in response.rows
+        ]
 
         context = {
             'reported_documents': reported_documents,
@@ -197,11 +215,10 @@ class AdminDashboardView(LoginRequiredMixin, View):
             'admin_users': admin_users,
             'educator_users': educator_users,
             'moderator_users': moderator_users,
-            # Include Google Analytics data here if needed # Pass data to template
+            'google_analytics_data': google_analytics_data,  # Add Google Analytics data here
         }
 
-        return render(request, 'admin/administrator.html', context)  # Replace with the correct template path
-
+        return render(request, 'admin/administrator.html', context)
 class DeleteUserView(APIView):
     permission_classes = [IsAdminUser]
 
@@ -260,7 +277,7 @@ def site_settings(request):
 
 @login_required
 def update_profile(request):
-    if request.user.user_type not in ['moderator', 'educator']:
+    if request.user.user_type not in ['Educator', 'Moderator']:
         raise PermissionDenied
 
     if request.method == 'POST':
