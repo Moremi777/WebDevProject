@@ -29,9 +29,3 @@ jobs:
       - name: Run tests
         run: docker run my_django_app python manage.py test
 
-      # (Optional) Push Docker image to DockerHub
-      - name: Login to DockerHub
-        run: echo "${{ secrets.DOCKERHUB_PASSWORD }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
-      
-      - name: Push Docker image
-        run: docker tag my_django_app:latest my_dockerhub_username/my_django_app:latest && docker push my_dockerhub_username/my_django_app:latest
