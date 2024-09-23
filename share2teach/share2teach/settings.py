@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-#+7y9u^t#ygb#nz)-8gua5f13(xz5!tiylkt_8pzdg_q=a38we
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['your-render-service-url', 'localhost']
 
 TESTING = len(sys.argv) > 1 and sys.argv[1] == 'test'
 
