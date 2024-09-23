@@ -7,9 +7,10 @@ from .models import Document, Rating
 from .forms import RatingForm
 #for upload files
 from django.shortcuts import render, redirect #for upload files #for upload files
+#from .models import UploadedFile #for upload file
 from django.conf import settings
 import os
-from django.http import JsonResponse
+from django.http import JsonResponse,HttpResponse
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from .models import Document, Report
@@ -35,6 +36,8 @@ from prometheus_client import generate_latest, CONTENT_TYPE_LATEST
 from django.http import HttpResponse
 from django.core.exceptions import ValidationError
 from authentication.models import Subject
+from prometheus_client import generate_latest,CONTENT_TYPE_LATEST
+
 
 def home(request):
     return render(request, 'home.html')
@@ -201,6 +204,11 @@ def report_document(request, document_id):
     return render(request, 'document_detail.html', {'document': document, 'form': form})'''
  
 
+#for upload files begin
+from django.shortcuts import render, redirect
+#from .models import UploadedFile
+from .forms import FileUploadForm
+
 def upload_file(request):
     if request.method == 'POST':
         form = FileUploadForm(request.POST, request.FILES)
@@ -210,7 +218,7 @@ def upload_file(request):
             return redirect('success')
     else:
         form = FileUploadForm()
-    return render(request, 'upload.html', {'form': form})
+    return render(request, 'fileupload/upload.html', {'form': form})
 
 
 def success(request):
@@ -245,6 +253,12 @@ def subjects(request):
 def selected_subject(request, subject_id):
     subject = get_object_or_404(Subject, id=subject_id)
     return render(request, 'selected_subject.html', {'subject': subject})
+
+#Metric view for user performance
+def metrics_view(request):
+    metrics_page = generate_latest()
+    return HttpResponse(metrics_page, content_type = CONTENT_TYPE_LATEST)
+
     
     
 
