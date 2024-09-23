@@ -34,6 +34,7 @@ from django.core.files.storage import default_storage
 from prometheus_client import generate_latest, CONTENT_TYPE_LATEST
 from django.http import HttpResponse
 from django.core.exceptions import ValidationError
+from authentication.models import Subject
 
 def home(request):
     return render(request, 'home.html')
@@ -86,12 +87,6 @@ def search_results(request):
     query = request.GET.get('q')
     results = Document.objects.filter(name__icontains=query)  # Replace 'name' with the field you want to search
     return render(request, 'searchresults.html', {'results': results, 'query': query})
-
-
-def subject_documents(request, subject_id):
-    subject = get_object_or_404(Subject, id=subject_id)
-    documents = Document.objects.filter(subject=subject)
-    return render(request, 'subject_documents.html', {'subject': subject, 'documents': documents})
 
 
 def metrics_view(request):
@@ -239,16 +234,16 @@ def search_results(request):
 #View subjects
 def subjects(request):
     # Fetch all subjects from the Subjects table
-    subjects = Subjects.objects.all()
+    subjects = Subject.objects.all()
     # Render the 'subjects.html' template and pass the subjects to it
-    return render(request, 'subjects.html', {'subjects': subjects})
+    return render(request, 'subjects.html', {'subject': subjects})
 
 #View selected subject
 
 # New view for displaying selected subject details
 
 def selected_subject(request, subject_id):
-    subject = get_object_or_404(Subjects, id=subject_id)
+    subject = get_object_or_404(Subject, id=subject_id)
     return render(request, 'selected_subject.html', {'subject': subject})
     
     
@@ -260,7 +255,7 @@ def user_subject_view(request):
         if form.is_valid():
             user_id = form.cleaned_data['user_id']
             # Call the filter_subjects method to limit the dropdown options
-            form.filter_subjects(user_id)
+            form.filter_subject(user_id)
     else:
         form = SubjectForm()
     

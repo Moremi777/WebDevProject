@@ -20,7 +20,6 @@ from django.http import HttpResponse
 urlpatterns = [
     path("", views.home, name="home"), 
     path('search/', views.search_results, name='search_results'),  
-    path('subjects/<int:subject_id>/', views.subject_documents, name='subject_documents'),
     path('upload/', views.upload_document, name='upload_document'),
     path('documents/', views.document_list, name='document_list'),
     path('document/<int:document_id>/', views.document_detail, name='document_detail'),
