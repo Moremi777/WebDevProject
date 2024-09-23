@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-#+7y9u^t#ygb#nz)-8gua5f13(xz5!tiylkt_8pzdg_q=a38we
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['your-render-service-url', 'localhost']
+ALLOWED_HOSTS = ['https://share2teach-website.onrender.com', '127.0.0.1']
 
 TESTING = len(sys.argv) > 1 and sys.argv[1] == 'test'
 

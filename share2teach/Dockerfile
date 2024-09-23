@@ -1,23 +1,15 @@
-# Use the official Python image from the Docker Hub
 FROM python:3.10
 
-# Set the working directory in the container
+# Set the working directory
 WORKDIR /app
 
-# Copy the requirements file into the container
-COPY requirements.txt /app/
+# Copy requirements and install dependencies
+COPY requirements.txt .
+RUN pip install --upgrade pip
+RUN pip install -r requirements.txt
 
-# Install the dependencies
-RUN pip install --no-cache-dir -r requirements.txt
+# Copy the application code
+COPY . .
 
-# Copy the entire project into the container
-COPY . /app/
-
-# Set environment variables
-ENV PYTHONUNBUFFERED=1
-
-# Expose the port the app runs on
-EXPOSE 8000
-
-# Command to run the application
-CMD ["gunicorn", "--bind", "0.0.0.0:8000", "share2teach.wsgi:application"]
+# Command to run your application
+CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
