@@ -22,7 +22,6 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-#+7y9u^t#ygb#nz)-8gua5f13(xz5!tiylkt_8pzdg_q=a38we'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -103,6 +102,12 @@ CORS_ALLOWED_ORIGINS = [
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
+
+
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'django-insecure-#+7y9u^t#ygb#nz)-8gua5f13(xz5!tiylkt_8pzdg_q=a38we')
+
+# Retrieve the database URL from environment variables
+DATABASE_URL = os.environ.get('DATABASE_URL', 'mysql://Oleboggeng:@AnbuBlackOps2024@localhost:3331/share2teach')
 
 DATABASES = {
     'default': {
