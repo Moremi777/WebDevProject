@@ -51,6 +51,31 @@
             <h4>Site Statistics</h4>
              <a href="https://analytics.google.com/analytics/web/?authuser=0#/p454885155/reports/reportinghub?params=_u..nav%3Dmaui"> View Report </a>
         </div>
+        <!-- Google Analytics Data Section -->
+<div>
+    <h2>Google Analytics Data</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Active Users</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for data in google_analytics_data %}
+            <tr>
+                <td>{{ data.date }}</td>
+                <td>{{ data.active_users }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="2">No data available.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
     </section>
 
     <section>

@@ -26,7 +26,6 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views import View
 from .forms import UserEditForm  # Import your form if you have one
 from django.shortcuts import render, get_object_or_404, redirect
-from .utils.analytics import get_google_analytics_data
 from rest_framework.permissions import IsAuthenticated
 from .serializers import UserSerializer
 from .permissions import IsAdminUser
@@ -38,7 +37,6 @@ from .forms import CustomUserCreationForm
 from django.contrib.auth.decorators import user_passes_test
 from .forms import UserUpdateForm
 from django.contrib.auth import update_session_auth_hash
-
 from base.models import Report 
 
 class EmailThread(threading.Thread):
@@ -100,6 +98,8 @@ class RegisterAPIView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class LoginAPIView(APIView):
+    queryset = User.objects.all()
+    serializer_class = RegisterSerializer
     def post(self, request, *args, **kwargs):
         if request.method == 'POST':
             data = request.data  # Use request.data instead of json.loads(request.body)
@@ -184,12 +184,211 @@ def add_user(request):
 
 class AdminDashboardView(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
+        # Collect user statistics
         total_users = User.objects.count()
-        reported_documents = Report.objects.all() 
-        # Breakdown by user types (assuming you have a UserProfile model with a user_type field)
+        reported_documents = Report.objects.all()
         admin_users = User.objects.filter(user_type='administrator').count()
         educator_users = User.objects.filter(user_type='educator').count()
         moderator_users = User.objects.filter(user_type='moderator').count()
+
+        # Initialize Google Analytics client
+        client = BetaAnalyticsDataClient.from_service_account_file(
+            'templates/admin/serviceapp-427100-5bbd9962ded2.json'
+        )
+
+        # Request for page views and active users
+        report_request = RunReportRequest(
+            property='properties/454885155',  # Use your actual property ID
+            dimensions=[{'name': 'pagePath'}],
+            metrics=[
+                {'name': 'screenPageViews'},
+                {'name': 'activeUsers'},
+                {'name': 'engagementRate'}  # Corrected metric
+            ],
+            date_ranges=[{'start_date': '20daysAgo', 'end_date': 'today'}]
+        )
+
+        # Request for daily active users
+        ga_request = RunReportRequest(
+            property='properties/454885155',
+            dimensions=[{'name': 'date'}],
+            metrics=[{'name': 'activeUsers'}],
+            date_ranges=[{'start_date': '30daysAgo', 'end_date': 'today'}]
+        )
+
+        # Fetch analytics data
+        analytics_data = self.fetch_analytics_data(client, report_request)
+        daily_active_users_data = self.fetch_analytics_data(client, ga_request, is_daily=True)
+
+        # Prepare context for rendering
+        context = {
+            'reported_documents': reported_documents,
+            'total_users': total_users,
+            'admin_users': admin_users,
+            'educator_users': educator_users,
+            'moderator_users': moderator_users,
+            'page_views_data': [item['page_views'] for item in analytics_data],
+            'active_users_data': [item['active_users'] for item in analytics_data],
+            'avg_engagement_data': [item['engagementRate'] for item in analytics_data],  # Use engagementRate
+            'daily_labels': [item['date'] for item in daily_active_users_data],
+            'daily_active_users_data': [item['active_users'] for item in daily_active_users_data],
+        }
+
+        return render(request, 'admin/administrator.html', context)
+
+    def fetch_analytics_data(self, client, request, is_daily=False):
+        """Fetches analytics data from Google Analytics."""
+        try:
+            response = client.run_report(request)
+            if is_daily:
+                return [{'date': row.dimension_values[0].value, 'active_users': row.metric_values[0].value} for row in response.rows]
+            else:
+                return [{
+                    'page_path': row.dimension_values[0].value,
+                    'page_views': row.metric_values[0].value,
+                    'active_users': row.metric_values[1].value,
+                    'engagementRate': row.metric_values[2].value,  # Use engagementRate
+                } for row in response.rows]
+        except Exception as e:
+            print(f"Error fetching Google Analytics data: {e}")
+            return []
+    def get(self, request, *args, **kwargs):
+        # Collect user statistics
+        total_users = User.objects.count()
+        reported_documents = Report.objects.all()
+        admin_users = User.objects.filter(user_type='administrator').count()
+        educator_users = User.objects.filter(user_type='educator').count()
+        moderator_users = User.objects.filter(user_type='moderator').count()
+
+        # Initialize Google Analytics client
+        client = BetaAnalyticsDataClient.from_service_account_file(
+            'templates/admin/serviceapp-427100-5bbd9962ded2.json'
+        )
+
+        # Request for page views and active users
+        report_request = RunReportRequest(
+            property='properties/454885155',  # Use your actual property ID
+            dimensions=[{'name': 'pagePath'}],
+            metrics=[
+                {'name': 'screenPageViews'},
+                {'name': 'activeUsers'},
+                {'name': 'averageEngagementTime'}
+            ],
+            date_ranges=[{'start_date': '20daysAgo', 'end_date': 'today'}]
+        )
+
+        # Request for daily active users
+        ga_request = RunReportRequest(
+            property='properties/454885155',
+            dimensions=[{'name': 'date'}],
+            metrics=[{'name': 'activeUsers'}],
+            date_ranges=[{'start_date': '20daysAgo', 'end_date': 'today'}]
+        )
+
+        # Fetch analytics data
+        analytics_data = self.fetch_analytics_data(client, report_request)
+        daily_active_users_data = self.fetch_analytics_data(client, ga_request, is_daily=True)
+
+        # Prepare context for rendering
+        context = {
+            'reported_documents': reported_documents,
+            'total_users': total_users,
+            'admin_users': admin_users,
+            'educator_users': educator_users,
+            'moderator_users': moderator_users,
+            'page_views_data': [item['page_views'] for item in analytics_data],
+            'active_users_data': [item['active_users'] for item in analytics_data],
+            'avg_engagement_data': [item['avg_engagement_time'] for item in analytics_data],
+            'daily_labels': [item['date'] for item in daily_active_users_data],
+            'daily_active_users_data': [item['active_users'] for item in daily_active_users_data],
+        }
+
+        return render(request, 'admin/administrator.html', context)
+
+    def fetch_analytics_data(self, client, request, is_daily=False):
+        """Fetches analytics data from Google Analytics."""
+        try:
+            response = client.run_report(request)
+            if is_daily:
+                return [{'date': row.dimension_values[0].value, 'active_users': row.metric_values[0].value} for row in response.rows]
+            else:
+                return [{
+                    'page_path': row.dimension_values[0].value,
+                    'page_views': row.metric_values[0].value,
+                    'active_users': row.metric_values[1].value,
+                    'avg_engagement_time': row.metric_values[2].value,
+                } for row in response.rows]
+        except Exception as e:
+            print(f"Error fetching Google Analytics data: {e}")
+            return []
+    def get(self, request, *args, **kwargs):
+        total_users = User.objects.count()
+        reported_documents = Report.objects.all() 
+        admin_users = User.objects.filter(user_type='administrator').count()
+        educator_users = User.objects.filter(user_type='educator').count()
+        moderator_users = User.objects.filter(user_type='moderator').count()
+
+        # Fetching Google Analytics data
+        client = BetaAnalyticsDataClient.from_service_account_file(
+            'templates/admin/serviceapp-427100-5bbd9962ded2.json'
+        )
+
+        ga_request = RunReportRequest(
+            property='properties/454885155',  # Replace with your actual property ID
+            dimensions=[{'name': 'date'}],
+            metrics=[{'name': 'activeUsers'}],
+            date_ranges=[{'start_date': '20daysAgo', 'end_date': 'today'}]
+        )
+
+        report_request = RunReportRequest(
+            property='properties/454885155',  # Replace with your property ID
+            dimensions=[{'name': 'pagePath'}],
+            metrics=[
+                {'name': 'screenPageViews'},
+                {'name': 'activeUsers'},
+                {'name': 'engagementRate'}
+            ],
+            date_ranges=[{'start_date': '30daysAgo', 'end_date': 'today'}]
+        )
+
+        try:
+            response = client.run_report(report_request)
+            analytics_data = [
+                {
+                    'page_path': row.dimension_values[0].value,
+                    'page_views': row.metric_values[0].value,
+                    'active_users': row.metric_values[1].value,
+                }
+                for row in response.rows
+            ]
+        except Exception as e:
+            analytics_data = []
+            print(f"Error fetching Google Analytics data: {e}")
+
+        # Prepare data for Chart.js
+        labels = [item['page_path'] for item in analytics_data]
+        page_views_data = [item['page_views'] for item in analytics_data]
+        active_users_data = [item['active_users'] for item in analytics_data]
+
+        context = {
+            'labels': labels,
+            'page_views_data': page_views_data,
+            'active_users_data': active_users_data,
+        }
+
+        try:
+            response = client.run_report(ga_request)
+            google_analytics_data = [
+                {'date': row.dimension_values[0].value, 'active_users': row.metric_values[0].value}
+                for row in response.rows
+            ]
+        except Exception as e:
+            google_analytics_data = []
+            print(f"Error fetching Google Analytics data: {e}")
+
+        # Prepare data for Chart.js
+        labels = [item['date'] for item in google_analytics_data]
+        active_users_data = [item['active_users'] for item in google_analytics_data]
 
         context = {
             'reported_documents': reported_documents,
@@ -197,10 +396,11 @@ class AdminDashboardView(LoginRequiredMixin, View):
             'admin_users': admin_users,
             'educator_users': educator_users,
             'moderator_users': moderator_users,
-            # Include Google Analytics data here if needed # Pass data to template
+            'labels': labels,  # Dates for the chart
+            'active_users_data': active_users_data,  # Active users for the chart
         }
 
-        return render(request, 'admin/administrator.html', context)  # Replace with the correct template path
+        return render(request, 'admin/administrator.html', context)
 
 class DeleteUserView(APIView):
     permission_classes = [IsAdminUser]
@@ -260,7 +460,7 @@ def site_settings(request):
 
 @login_required
 def update_profile(request):
-    if request.user.user_type not in ['moderator', 'educator']:
+    if request.user.user_type not in ['Educator', 'Moderator']:
         raise PermissionDenied
 
     if request.method == 'POST':

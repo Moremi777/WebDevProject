@@ -22,12 +22,17 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-#+7y9u^t#ygb#nz)-8gua5f13(xz5!tiylkt_8pzdg_q=a38we'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+import os
+import dj_database_url
+
+DEBUG = False  # Disable debug mode in production
+
+ALLOWED_HOSTS = ['*']
+
 
 TESTING = len(sys.argv) > 1 and sys.argv[1] == 'test'
 
@@ -50,6 +55,7 @@ INSTALLED_APPS = [
     'authentication',
     'rest_framework',
     'rest_framework.authtoken',
+    'rest_framework_simplejwt',
     'corsheaders',
     'storages',
 ]
@@ -96,7 +102,7 @@ TEMPLATES = [
 WSGI_APPLICATION = 'share2teach.wsgi.application'
 
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:8000",  # Your frontend domain
+    "http://127.0.0.1:8000",  # Your frontend domain
     # Add other domains if needed
 ]
 
@@ -104,33 +110,27 @@ CORS_ALLOWED_ORIGINS = [
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
-"""DATABASES = {
-'''DATABASES = {
+
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'django-insecure-#+7y9u^t#ygb#nz)-8gua5f13(xz5!tiylkt_8pzdg_q=a38we')
+
+# Retrieve the database URL from environment variables
+DATABASE_URL = os.environ.get('DATABASE_URL', 'mysql://Oleboggeng:@AnbuBlackOps2024@localhost:3331/share2teach')
+
+DATABASES = {
     'default': {
-        'ENGINE': 'sql_server.pyodbc',  # Or 'django.db.backends.postgresql', depending on your Azure database type
-        'NAME': 'Share2Teach-db',          # Your Azure database name
-        'USER': 'anbu',               # Your Azure SQL Database username
-        'PASSWORD': 'Black0ps',           # Your Azure SQL Database password
-        'HOST': 'anbu-server.database.windows.net',  # Azure database server URL
-        'PORT': '',                        # Default MySQL port (or another if using a different database)
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'share2teach',
+        'USER': 'Olebogeng',
+        'PASSWORD': '@AnbuBlackOps2024',
+        'HOST': '127.0.0.1',
+        'PORT': '3331',
         'OPTIONS': {
-            'driver': 'ODBC Driver 18 for SQL Server',}
-    }
-}'''
-
-DATABASES = {
-    'default' :{
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}"""
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+            'charset': 'utf8mb4',
+            'use_unicode': True,
+        },
     }
 }
+
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
@@ -198,6 +198,9 @@ USE_I18N = True
 
 USE_TZ = True
 
+SECURE_SSL_REDIRECT = True
+CSRF_TRUSTED_ORIGINS = ['https://share2teach-nwu-avbwg7emg9ftasc3.southafricanorth-01.azurewebsites.net']
+
 EMAIL_FROM_USER = 'thespectrumstore21@gmail.com'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = EMAIL_FROM_USER
@@ -219,24 +222,3 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 import os #For upload files
 MEDIA_URL = '/media/' #For upload files
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media') #For upload files
-
-# code to connect database to file storage
-AZURE_CONNECTION_STRING = 'DefaultEndpointsProtocol=https;AccountName=anbublackops;AccountKey=ydHHH//XnwTrsi8D89Jhw/V+bp0hsCtPADHGE1PFLeJ+ldRgW9MigDeOsWau3pofxyPfYKwpTskE+AStF/dVaw==;EndpointSuffix=core.windows.net'
-AZURE_SHARE_NAME = 'anbu-fileshare'
-
-# Azure Storage settings
-AZURE_ACCOUNT_NAME = 'anbublackops'  # Azure Storage account name
-AZURE_ACCOUNT_KEY = 'ydHHH//XnwTrsi8D89Jhw/V+bp0hsCtPADHGE1PFLeJ+ldRgW9MigDeOsWau3pofxyPfYKwpTskE+AStF/dVaw=='    # Azure Storage account key
-AZURE_CONTAINER = 'uploads'   # Name of the container for file storage
-
-# Configure Django's default file storage to use Azure
-DEFAULT_FILE_STORAGE = 'storages.backends.azure_storage.AzureStorage'
-
-ORACLE_HOST = '127.0.0.1'
-ORACLE_PORT = '1521'
-ORACLE_SERVICE_NAME = 'XE'
-ORACLE_USERNAME = 'anbu'
-ORACLE_PASSWORD = 'cmpg'
-
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

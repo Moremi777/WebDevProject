@@ -43,12 +43,6 @@ class RegisterSerializer(serializers.ModelSerializer):
             fail_silently=False,
         )
 
-         # If the user should be an admin
-        if self.context['request'].user.is_superuser:
-            user.user_type = 'Administrator'
-            user.is_staff = True
-            user.is_superuser = True
-
         return user
 
 
