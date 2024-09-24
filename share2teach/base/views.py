@@ -204,11 +204,6 @@ def report_document(request, document_id):
     return render(request, 'document_detail.html', {'document': document, 'form': form})'''
  
 
-#for upload files begin
-from django.shortcuts import render, redirect
-#from .models import UploadedFile
-from .forms import FileUploadForm
-
 def upload_file(request):
     if request.method == 'POST':
         form = FileUploadForm(request.POST, request.FILES)

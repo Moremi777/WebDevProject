@@ -10,8 +10,7 @@ class RatingForm(forms.ModelForm):
         widgets = {
             'rating': forms.NumberInput(attrs={'min': 1, 'max': 5}),
         }
-from .models import UsersDemo
-'''from .models import UploadedFile'''
+
 
 class ReportForm(forms.ModelForm):
     class Meta:
