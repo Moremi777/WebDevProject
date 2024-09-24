@@ -49,6 +49,10 @@
           <!-- User is not logged in, so show login and signup links -->
           <li><a href="{% url 'login' %}">Login</a></li>
           <li><a href="{% url 'register' %}">Signup</a></li>
+          <li><a href="{% url 'about_us' %}">About Us</a></li>
+          <li><a href="{% url 'contributors_view' %}">Contributors</a></li>
+          <li><a href="{% url 'self_directed_learning' %}">Self Directed Learning</a></li>
+          <li><a href="{% url 'resource_list' %}">Other Useful OER's</a></li>
           {% endif %}
           {% if user.is_authenticated %}
           <li><a href="{% url 'upload_file' %}">Upload</a></li>

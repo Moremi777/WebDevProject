@@ -237,3 +237,6 @@ ORACLE_PORT = '1521'
 ORACLE_SERVICE_NAME = 'XE'
 ORACLE_USERNAME = 'anbu'
 ORACLE_PASSWORD = 'cmpg'
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

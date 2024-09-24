@@ -1,5 +1,14 @@
+<!-- document_detail.html -->
 <h1>{{ document.title }}</h1>
+<p>{{ document.content }}</p>
 <p>{{ document.description }}</p>
+
+<!-- Display Tags -->
+<p>Tags: 
+    {% for tag in document.tags.split %}
+        <span class="tag">{{ tag }}</span>{% if not forloop.last %}, {% endif %}
+    {% endfor %}
+</p>
 
 <!-- Display current average rating -->
 <p>Average Rating: {{ avg_rating }}</p>
@@ -16,11 +25,5 @@
     </form>
 {% endif %}
 
-<!-- document_detail.html -->
-
-<h1>{{ document.title }}</h1>
-<p>{{ document.content }}</p>
-
 <!-- Add a Report Button -->
 <a href="{% url 'report_document' document.id %}" class="btn btn-danger">Report</a>
-

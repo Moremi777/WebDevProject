@@ -1,6 +1,6 @@
 from PIL import Image, ImageDraw, ImageFont, UnidentifiedImageError
-from PyPDF2 import PdfReader, PdfWriter
-import os
+#from PyPDF2 import PdfReader, PdfWriter
+
 
 def add_pdf_watermark(input_pdf_path, output_pdf_path, watermark_pdf_path):
     pdf_reader = PdfReader(input_pdf_path)

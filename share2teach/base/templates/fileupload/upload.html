@@ -1,4 +1,4 @@
-<!--<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -6,30 +6,35 @@
     <title>Upload File</title>
 </head>
 <body>
-    <h1>Upload File</h1>
-    <form method="post" enctype="multipart/form-data">
+    <h1>Upload a New Document</h1>
+
+    <form method="POST" enctype="multipart/form-data">
         {% csrf_token %}
         {{ form.as_p }}
-        <button type="submit">Upload</button>
+        
+        <label for="id_tags">Tags:</label>
+        <input type="text" name="tags" id="id_tags" placeholder="Add space-separated tags prefixed with #">
+        
+        <button type="submit">Upload Document</button>
     </form>
+
+    <h1>Uploaded Documents</h1>
+
+    <ul>
+      {% for document in documents %}
+          <li>
+              <a href="{% url 'document_detail' document.id %}">{{ document.title }}</a><br>
+              Tags: 
+              {% if document.tags %}
+                  <!-- Display the tags entered, assuming space-separated tags -->
+                  {{ document.tags }}
+              {% else %}
+                  No tags
+              {% endif %}
+          </li>
+      {% endfor %}
+  </ul>
+
     <a href="{% url 'file_list' %}">View Uploaded Files</a>
 </body>
-</html>-->
-<h1>Upload a New Document</h1>
-
-<form method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Upload</button>
-</form>
-
-<h1>Uploaded Documents</h1>
-
-<ul>
-  {% for document in documents %}
-    <li><a href="{% url 'document_detail' document.id %}">{{ document.title }}</a></li>
-  {% endfor %}
-</ul>
-
-<a href="{% url 'upload_document' %}">Upload a New Document</a>
-
+</html>
