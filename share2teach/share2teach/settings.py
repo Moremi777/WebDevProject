@@ -31,7 +31,7 @@ import dj_database_url
 
 DEBUG = False  # Disable debug mode in production
 
-ALLOWED_HOSTS = ['https://share2teach-nwu-avbwg7emg9ftasc3.southafricanorth-01.azurewebsites.net']
+ALLOWED_HOSTS = ['*']
 
 
 TESTING = len(sys.argv) > 1 and sys.argv[1] == 'test'
