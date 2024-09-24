@@ -26,7 +26,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['https://share2teach-website.onrender.com', '127.0.0.1']
+import os
+import dj_database_url
+
+DEBUG = False  # Disable debug mode in production
+
+ALLOWED_HOSTS = ['https://share2teach-nwu-avbwg7emg9ftasc3.southafricanorth-01.azurewebsites.net']
+
 
 TESTING = len(sys.argv) > 1 and sys.argv[1] == 'test'
 
@@ -191,6 +197,9 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 
 USE_TZ = True
+
+SECURE_SSL_REDIRECT = True
+CSRF_TRUSTED_ORIGINS = ['https://share2teach-nwu-avbwg7emg9ftasc3.southafricanorth-01.azurewebsites.net']
 
 EMAIL_FROM_USER = 'thespectrumstore21@gmail.com'
 EMAIL_HOST = 'smtp.gmail.com'
